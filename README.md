@@ -1,6 +1,5 @@
 # Móvil como controlador ubicuo
 Due date: May 10, 2023
-Utilizar el teléfono móvil (micrófono, acelerómetro, etc) para controlar una aplicación de reproducción de video
 
 ### Componentes
 
