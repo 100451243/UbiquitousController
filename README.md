@@ -26,18 +26,18 @@ Due date: May 10, 2023
 ### Proceso
 
 - #### Ideación y diseño
-    - Descubir investigar: análisi del contexto del diseño y definición del problema
+    - Descubir investigar: análisis del contexto del diseño y definición del problema
     - Definir sintetizar: Creación de personas y escenarios que capturen que va a suceder; trazado de un estado preferido y requisitos
     - Desarrollar e idear: documentación de las fases divergente y convergente de ideación.
         - Bocetos
         - Esquemas
-        - Prototips de baja fidelidad
+        - Prototipos de baja fidelidad
         - Interacciones con el diseño
 - #### Implementación del prototipo
     - Arquitecutra de red usando node.js, express y socket.io
     - Implementación de las aplicaciones web
     - Implementación de las interacciones utilizando las WEB API
 - #### Evaluación
-    - Realizar una evaluaciçon con usuarios
+    - Realizar una evaluación con usuarios
     - Documentación del protocolo de estudio
     - Documentación de resultados y conocimiento aprendido
