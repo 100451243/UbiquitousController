@@ -1,0 +1,3 @@
+npm install --save qrcode
+npm install --save express
+ 
