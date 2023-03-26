@@ -1,7 +1,10 @@
 const http = require('http');
 var QRCode = require('qrcode');
+const { v4: uuid } = require('uuid');
 
 var fs = require('fs');
+
+
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -12,6 +15,13 @@ let mycode;
 
 const express = require('express');
 const app = express();
+
+
+
+
+const url = "https://adelpozoman.es";
+
+
 
 
 
@@ -71,17 +81,25 @@ generateQR('https://tv.adelpozoman.es') //we will call this with different id fo
 
 let redirect = false;
 
+users = [];
+
 
 const server3 = app.listen(3002, () => {
     console.log('Server running at http://localhost:3002');
 });
 app.get('/', (req,res) => {
-  if (redirect == false) {
+  let id = req.cookies;
+  if (id == undefined) {
+    console.log('First visit of user')
+    users.push(id = uuid())
+    res.cookie('id', id);
+    generateQR( url + '?id=' + id + '&mobile=true')
     return res.sendFile(__dirname + '/indexIntro.html');
   }
-    else {
-      console.log('User is logged in, redirecting to film contents')
-      return res.sendFile(__dirname + '/index.html')
+  else {
+    console.log('User is logged in, redirecting to film contents')
+    res.cookie('id', id)
+    return res.sendFile(__dirname + '/index.html')
   }
 });
 
