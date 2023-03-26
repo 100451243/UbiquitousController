@@ -34,7 +34,7 @@ QRCode.toString('https://tv.adelpozoman.es', { type: 'terminal' }, function (err
 
 const generateQR = async text => {
   try {
-    await QRCode.toFile('node-server/qrcode.png', text)
+    await QRCode.toFile('src/qrcode.png', text)
   }
     catch (err) {
     console.error(err)
