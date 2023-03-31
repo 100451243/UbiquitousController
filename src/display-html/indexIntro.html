@@ -8,8 +8,14 @@
 <!-- Show qrcode.png
 -->
 <img src="../qrcode.png" alt="qrcode.pngfdsa" />
+<p> You have been assigned user: </p>
+<p id="user"></p>
 
-
+<script>
+    var user = document.getElementById("user");
+    //save cookie "id" in user.innerHTML
+    user.innerHTML = document.cookie;
+</script>
 <!--<script>-->
 <!--    setTimeout(function () { location.reload(); }, 1000);-->
 <!--</script>-->

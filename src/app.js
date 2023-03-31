@@ -1,111 +1,68 @@
 const http = require('http');
-var QRCode = require('qrcode');
-const { v4: uuid } = require('uuid');
+const QRCode = require('qrcode');
+const { v4: uuid, stringify} = require('uuid');
+const fs = require('fs');
 
-var fs = require('fs');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const app = express();
+app.use(cookieParser());
 
-
+const storage = require('node-persist');
+storage.init( /* options ... */ );
 
 const hostname = '127.0.0.1';
 const port = 3000;
 
-let mycode;
+const dhtml = "/display-html";
 
 
 
-const express = require('express');
-const app = express();
-
-
-
-
-const url = "https://adelpozoman.es";
-
-
-
-
-
-
-//
-QRCode.toString('https://tv.adelpozoman.es', { type: 'terminal' }, function (err, url) {
-  console.log(url);
-  const mycode = url;
-})
-
-const generateQR = async text => {
+const generateQR = async text => {        //we will call this with different id for different users
   try {
-    await QRCode.toFile('src/qrcode.png', text)
+    await QRCode.toFile(__dirname +'qrcode.png', text)
   }
     catch (err) {
     console.error(err)
     }
 }
-generateQR('https://tv.adelpozoman.es') //we will call this with different id for different users
-//
-//
-//
-//
-// const server = http.createServer((req, res) => {
-//   res.statusCode = 200;
-//   //res.setHeader('Content-Type', 'text/html');
-//   html = fs.readFileSync(__dirname + '/indexIntro.html', 'utf8');
-//   res.end(html);
-// });
-//
-// server.listen(port, hostname, () => {
-//   console.log(`Server running at http://${hostname}:${port}/`);
-// });
-//
-//
-//
-//
-//
-
-//
-// app.use(express.static(__dirname));
-//
-// app.get('/', function (req, res) {
-//   //res.sendFile(__dirname + 'index.html');
-//   QRCode.toDataURL('https://tv.adelpozoman.es', function (err, url) {
-//     console.log(url)
-//     res.render('index', {qr: url});
-//   });
-// });
-//
-// const port2 = 3001;
-//
-// app.listen(port2, () => {
-//   console.log(`Server running at http://localhost:${port2}`);
-// });
 
 
-let redirect = false;
 
-users = [];
+//users = {};
 
-
-const server3 = app.listen(3002, () => {
-    console.log('Server running at http://localhost:3002');
+const server3 = app.listen(port, hostname, () => {
+    console.log('Server running at http://' + hostname + ':' + port + '/');
 });
-app.get('/', (req,res) => {
-  let id = req.cookies;
-  if (id == undefined) {
-    console.log('First visit of user')
-    users.push(id = uuid())
+app.get('/', async (req, res) => {
+  let id = req.cookies['id'];
+  if (id === undefined) {
+    console.log(id)
+    //users[id = uuid().slice(0, 8)] = "false";
+    storage.setItem(id = uuid().slice(0, 8), 'false')
+    console.log('First visit of user, given id is: ' + id)
     res.cookie('id', id);
-    generateQR( url + '?id=' + id + '&mobile=true')
-    return res.sendFile(__dirname + '/indexIntro.html');
-  }
-  else {
-    console.log('User is logged in, redirecting to film contents')
+    generateQR(hostname + '?id=' + id + '&mobile=true')
+    return res.sendFile(__dirname + dhtml + '/indexIntro.html');
+  } else if (await storage.getItem(id) == "false") {
+    console.log("User has yet to login with id %s", id)
+    generateQR(hostname + '?id=' + id + '&mobile=true')
+    return res.sendFile(__dirname + dhtml + '/indexIntro.html');
+  } else if (await storage.getItem(id) == "true") {
+    console.log('User is logged in with id %s, redirecting to film contents', id)
     res.cookie('id', id)
-    return res.sendFile(__dirname + '/index.html')
+    return res.sendFile(__dirname + dhtml + '/index.html')
+  } else {
+    console.log('Undefined behaviour');
+    console.log(storage.getItem(id));
   }
 });
 
-app.get('/login', (req, res) => {
-  console.log('login')
-  redirect = true;
+app.get('/login', async (req, res) => {
+  const id = req.query.id;
+  await storage.setItem(id, 'true')
+  console.log('login of user with id %s', id)
+  //users[id] = "true";
   //return res.sendFile(__dirname + '/indexIntro.html');
 })
 
