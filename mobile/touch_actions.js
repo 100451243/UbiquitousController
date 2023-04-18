@@ -1,6 +1,8 @@
 var main_screen = document.querySelector("#main-screen");
 main_screen.addEventListener("touchstart", handleTouchStart, false);        
 main_screen.addEventListener("touchmove", handleTouchMove, false);
+main_screen.addEventListener("click", tap, false);
+main_screen.addEventListener("dblclick", double_tap, false);
 
 var xDown = null;                                                        
 var yDown = null;                        
@@ -10,8 +12,8 @@ function handleTouchStart(evt) {
     const firstTouch = evt.touches[0];                                      
     xDown = firstTouch.clientX;                                      
     yDown = firstTouch.clientY;
-};                                                
-                               
+};      
+
 // Classifies the movement of the fingen
 function handleTouchMove(evt) {
     if ( ! xDown || ! yDown ) {
@@ -78,3 +80,28 @@ function down_swipe(){
         squiggle_svg.style.transform = "rotate(90deg)";
     }
 }
+
+function tap(evt) {
+    tap_timeout = setTimeout(() =>{
+        let circle = document.querySelector("#circle-tap");
+        circle.style.left = `${evt.clientX}px`;
+        circle.style.top = `${evt.clientY}px`;
+        circle.style.border = "0 solid green"
+        circle.style.animation = "tapCircle 0.3s linear infinite"
+        setTimeout(() => {
+            circle.style.animation = ""
+        }, 300);
+    }, 1000);
+};
+
+function double_tap(evt) {
+    clearTimeout(tap_timeout);
+    let circle = document.querySelector("#circle-tap");
+    circle.style.left = `${evt.clientX}px`;
+    circle.style.top = `${evt.clientY}px`;
+    circle.style.border = "0 solid red"
+    circle.style.animation = "tapCircle 0.3s linear infinite"
+    setTimeout(() => {
+        circle.style.animation = ""
+    }, 300);
+};
