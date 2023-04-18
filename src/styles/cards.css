@@ -1,0 +1,23 @@
+body {
+    background-color: #E0E0E0;
+    margin-bottom: 20px;
+}
+
+h5 {
+    font-size: 20px;
+    font-weight: bolder;
+    color: #000000;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+img {
+    width:200px;
+    height:300px;
+}
+
+#card-columns{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}

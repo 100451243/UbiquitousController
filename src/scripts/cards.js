@@ -82,29 +82,42 @@ const arrayOfnames = ['Alien (1979)',
     'V for Vendetta (2006)',
 ];
 
-//document.getElementById("display").innerHTML = arrayOfnames.join("<br>");
+function display_cards() {
+    let display = document.getElementById("card-columns");
 
-main = document.getElementById("display");
+    for (let j = 0; j < arrayOfnames.length; j++) {
+        // creamos el div que contendrá la info de las películas
+        let div1 = document.createElement("div");
+        div1.class = "card";
+        div1.style = "margin: 20px; width: 200px; padding: 20px; box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5); border-radius: 10px; background-color: #9E9E9E;";
+        // cartel de la película
+        let img = document.createElement("img");
+        img.class = "card-img-top";
+        img.src = "../../cartel.png";
+        img.alt = "Card image cap";
+        // nombre y descripción de la película
+        let div2 = document.createElement("div");
+        div2.class = "card-body";
+        div2.style = "width: 200px;";
 
-main.innerHTML += `<div class="card-columns"></div>`
-for (let j = 0; j < arrayOfnames.length; j++) {
-    main.innerHTML += `
+        let h5 = document.createElement("h5");
+        h5.class = "card-title";
+        h5.innerHTML = arrayOfnames[j];
+        h5.style = "width: inherit; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;";
 
-    <div class="col">
+        let p = document.createElement("p");
+        p.class = "card-text";
+        p.innerHTML = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
+        p.style = "width: inherit; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;";
 
+        div2.appendChild(h5);
+        div2.appendChild(p);
 
-            <div class="card" style="max-width: 30%">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-            <h5 class="card-title">`+ arrayOfnames[j] + `</h5>
-            <p class="card-text">  Esta película está guapa
-                </p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-            </div>
-    </div>
-`
+        div1.appendChild(img);
+        div1.appendChild(div2);
+
+        display.appendChild(div1);
+    }
 }
-main.innerHTML += `</div>`
-//<p id="display" style="width:1000px;height:1000px"></textarea>
-//style="width: 18rem;"
+
+display_cards();
