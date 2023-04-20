@@ -24,7 +24,7 @@ const dhtml = "/display-html";
 
 const generateQR = async text => {        //we will call this with different id for different users
   try {
-    await QRCode.toFile(__dirname +'qrcode.png', text)
+    await QRCode.toFile(__dirname +'/qrcode.png', text)
   } catch (err) {console.error(err)}
 }
 
@@ -40,11 +40,11 @@ app.get('/', async (req, res) => {
     storage.setItem(id = uuid().slice(0, 8), 'false')
     console.log('First visit of user, given id is: ' + id)
     res.cookie('id', id);
-    generateQR(hostname + '?id=' + id + '&mobile=true')
+    generateQR("http://" + hostname + ':3000/login?id=' + id + '&mobile=true')
     return res.sendFile(__dirname + dhtml + '/indexIntro.html');
   } else if (await storage.getItem(id) == "false") {
     console.log("User has yet to login with id %s", id)
-    generateQR(hostname + '?id=' + id + '&mobile=true')
+    generateQR("http://" + hostname + ':3000/login?id=' + id + '&mobile=true')
     return res.sendFile(__dirname + dhtml + '/indexIntro.html');
   } else if (await storage.getItem(id) == "true") {
     console.log('User is logged in with id %s, redirecting to film contents', id)
