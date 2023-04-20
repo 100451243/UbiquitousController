@@ -1,0 +1,93 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+#main-screen{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background-color: #E0E0E0;
+}
+
+#info-circle{
+    font-size: 50px;
+    position: absolute;
+    color: #1e1e1e; 
+    top: 0.5vh;
+    left: 1vh;
+    z-index: 1000;
+}
+
+#squiggle{
+    stroke-dasharray: 450;
+    stroke-dashoffset: 450;
+    display: none;
+    animation: drawSquiggle 0.4s linear;
+}
+
+#squiggle-svg{
+    transform-origin: center;
+}
+
+#circle-tap{
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border-radius: 0;
+}
+
+#control-knob{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 0;
+}
+
+#control-knob > div{
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-radius: 0;
+}
+
+@keyframes drawSquiggle {
+    to {
+        stroke-dashoffset: -450;
+    }
+}
+
+@keyframes tapCircle{
+	0% {
+		width: 0;
+		height: 0;
+		border-width: 1px;
+		border-radius: 1px;
+  }
+	50% {
+		width: 0;
+		height: 0;
+		margin: -40px 0 0 -40px;
+		border-width: 40px;
+		border-radius: 40px;
+  }
+	100% {
+		width: 160px;
+		height: 160px;
+		margin: -80px 0 0 -80px;
+		border-width: 0;
+		border-radius: 160px;
+  }
+}
