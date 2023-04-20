@@ -1,3 +1,4 @@
+// File containing the logic for finger action detection
 var main_screen = document.querySelector("#main-screen");
 
 main_screen.addEventListener("touchstart", handle_touch_start, false);   
@@ -32,9 +33,10 @@ function handle_touch_start(evt) {
         // Two fingers are touching the screen 
         x2Down = evt.touches[1].clientX;
         y2Down = evt.touches[1].clientY;
+    } else {
+        // Wait 1s before allowing a hold
+        hold_timeout = setTimeout(() => { hold_down(); }, 700);
     }
-    // Wait 500ms before allowing a hold
-    hold_timeout = setTimeout(() => { hold_down(); }, 700);
 };
 
 function handle_touch_end(evt) {
@@ -64,7 +66,7 @@ function handle_touch_move(evt) {
 
 // Classifies the movement of two fingers
 function handle_two_fingers(evt){
-
+    clearTimeout(hold_timeout);
     var x1Up = evt.touches[0].clientX;
     var y1Up = evt.touches[0].clientY;
     var x2Up = evt.touches[1].clientX;
@@ -74,6 +76,12 @@ function handle_two_fingers(evt){
     var release_distance = Math.sqrt(Math.pow(x1Up - x2Up, 2) + Math.pow(y1Up - y2Up, 2));
     var initial_distance = Math.sqrt(Math.pow(x1Down - x2Down, 2) + Math.pow(y1Down - y2Down, 2));
     var distance_difference = release_distance - initial_distance;
+    
+    // Threshold for distance
+    let two_finger_threshold = 100;
+    if (Math.abs(distance_difference) < two_finger_threshold){
+        return;
+    }
 
     // If the distance between the fingers is increasing, it is a zoom
     if (distance_difference > 0){
@@ -83,12 +91,21 @@ function handle_two_fingers(evt){
     }
 }
 
+var zoom_wait = false;
 function zoom_out(){
-    animate_zoom_out();
+    if (!zoom_wait){
+        zoom_wait = true;
+        animate_zoom_out();
+        setTimeout(() => {zoom_wait = false;}, 500);
+    }
 }
 
 function zoom_in(){
-    animate_zoom_in();
+    if (!zoom_wait){
+        zoom_wait = true;
+        animate_zoom_in();
+        setTimeout(() => {zoom_wait = false;}, 500);
+    }
 }
 
 // Classfies the movement of one finger
@@ -104,7 +121,6 @@ function handle_swipe(evt){
     if ( Math.abs(xDiff) + Math.abs(yDiff) < swipe_threshold || evt.touches.length > 1) {
         return;
     }
-    console.log(Math.abs(xDiff));
     if ( Math.abs(xDiff) > Math.abs(yDiff) ) { //most significant
         if (xDiff > 0) {
             // Left swipe
@@ -148,25 +164,27 @@ var tap_timeout;
 function tap(evt) {
     if (showing_info){return;}
     tap_timeout = setTimeout(() =>{
-        animate_tap(evt.clientX, evt.clientY, yellow);
+        animate_tap(evt.clientX, evt.clientY, green);
     }, 100);
 };
 
 // Double tap event
 function double_tap(evt) {
-    if (showing_info){ return;}
+    if (showing_info){return;}
     clearTimeout(tap_timeout);
     animate_tap(evt.clientX, evt.clientY, carmine); 
 };
 
 var hold_timeout;
+var hold_switch = false;
 // Hold event
 function hold_down() {
     clearTimeout(tap_timeout);
-    if (showing_knob){
-        showing_knob = false;
+    if (hold_switch){
+        hold_switch = false;
     } else {
-        showing_knob = true;
+        hold_switch = true;
+        start_voice_recognition();
     }
     animate_hold();
 }
