@@ -17,6 +17,11 @@ const port = 3000;
 const dhtml = "/display-html";
 
 
+const createFilmList = require('./film-discovery.js');
+
+
+
+
 
 const generateQR = async text => {        //we will call this with different id for different users
   try {
@@ -47,6 +52,7 @@ app.get('/', async (req, res) => {
   } else if (await storage.getItem(id) == "true") {
     console.log('User is logged in with id %s, redirecting to film contents', id)
     res.cookie('id', id)
+    res.cookie('SameSite', 'None')
     return res.sendFile(__dirname + dhtml + '/index.html')
   } else {
     console.log('Undefined behaviour');
@@ -95,6 +101,11 @@ wss.on('connection', function connection(ws) {
         //     client.send(JSON.stringify({action: "reload", id: data.id}));
         //   }
         // });
+      }
+      if(data.action === "requestFilms"){
+        console.log("Will send films")
+        let films = createFilmList("filmsLink");
+        ws.send(JSON.stringify({action: "films", films: films}));
       }
     }
     catch (e) {
