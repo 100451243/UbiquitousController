@@ -96,16 +96,20 @@ function zoom_out(){
     if (!zoom_wait){
         zoom_wait = true;
         animate_zoom_out();
+        // Wait 500ms before allowing another zoom
         setTimeout(() => {zoom_wait = false;}, 500);
     }
+    send_movement("zoom_out");
 }
 
 function zoom_in(){
     if (!zoom_wait){
         zoom_wait = true;
         animate_zoom_in();
+        // Wait 500ms before allowing another zoom
         setTimeout(() => {zoom_wait = false;}, 500);
     }
+    send_movement("zoom_in");
 }
 
 // Classfies the movement of one finger
@@ -145,18 +149,22 @@ function handle_swipe(evt){
 
 function left_swipe(){
     animate_swipe(180);
+    send_movement("left-swipe");
 }
 
 function right_swipe(){
     animate_swipe(0);
+    send_movement("right-swipe");
 }
 
 function up_swipe(){
     animate_swipe(270);
+    send_movement("up-swipe");
 }
 
 function down_swipe(){
     animate_swipe(90);
+    send_movement("down-swipe");
 }
 
 var tap_timeout;
@@ -166,13 +174,16 @@ function tap(evt) {
     tap_timeout = setTimeout(() =>{
         animate_tap(evt.clientX, evt.clientY, green);
     }, 100);
+    send_movement("tap");
 };
 
 // Double tap event
 function double_tap(evt) {
     if (showing_info){return;}
+    // Cancel the tap event
     clearTimeout(tap_timeout);
     animate_tap(evt.clientX, evt.clientY, carmine); 
+    send_movement("double-tap");
 };
 
 var hold_timeout;
@@ -182,9 +193,10 @@ function hold_down() {
     clearTimeout(tap_timeout);
     if (hold_switch){
         hold_switch = false;
+        delete_knob();
     } else {
         hold_switch = true;
-        start_voice_recognition();
+        create_knob();
     }
     animate_hold();
 }
@@ -194,12 +206,13 @@ function click_info(evt) {
     if (!showing_info) {
         showing_info = true;
         animate_info_circle_open();
-        socket.send(JSON.stringify({"action":"requestFilms", "id":getCookie("id")}))
     } 
+    send_movement("info");
 }
 
 // Exit info
 function exit_info() {
+    // Wait 500ms before allowing any othre
     setTimeout(() => { showing_info = false;} , 500);
     animate_info_circle_close();
 }

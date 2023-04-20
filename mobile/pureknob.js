@@ -1204,7 +1204,7 @@ function create_knob() {
 }
 
 audio_knob.addListener(function(knob, value) {
-    console.log(value);
+    send_knob_value(value);
     // Send info to server
 });
 
