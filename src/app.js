@@ -62,12 +62,12 @@ app.get('/login', async (req, res) => {
   await storage.setItem(id, 'true')
   console.log('login of user with id %s', id)
   //broadcast to all clients
-    wss.clients.forEach(function each(client) {
-        if (client !== wss && client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({action: "reload", id: id}));
-            console.log("sent reload to client")
-        }
-    });
+  //   wss.clients.forEach(function each(client) {
+  //       if (client !== wss && client.readyState === WebSocket.OPEN) {
+  //           client.send(JSON.stringify({action: "reload", id: id}));
+  //           console.log("sent reload to client")
+  //       }
+  //   });
     let path2 = path.join(__dirname, '..', 'mobile', 'mobile.html');
   return res.sendFile(path2);
 })
@@ -82,10 +82,22 @@ app.get('/animations.js', async (req, res) => {
   return res.sendFile(path2);
 })
 
+app.get('/communication.js', async (req, res) => {
+  let path2 = path.join(__dirname, '..', 'mobile', 'communication.js');
+  return res.sendFile(path2);
+})
+
 app.get('/mobile.css', async (req, res) => {
   let path2 = path.join(__dirname, '..', 'mobile', 'mobile.css');
   return res.sendFile(path2);
 })
+
+app.get('/pureknob.js', async (req, res) => {
+  let path2 = path.join(__dirname, '..', 'mobile', 'pureknob.js');
+  return res.sendFile(path2);
+})
+
+
 // the following code sends .css and .js files
 app.use(express.static(__dirname, {
   extensions: ['htm', 'png', 'jpg', 'jpeg', 'gif', 'css', 'js']

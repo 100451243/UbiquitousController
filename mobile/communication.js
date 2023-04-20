@@ -10,6 +10,11 @@ window.getCookie = function(name) {
 }
 
 let socket = new WebSocket(location.origin.replace(/^http/, 'ws'));
+
+socket.onopen = function() {
+    alert("Connected to server");
+    socket.send(JSON.stringify({"action":"validated", "id":getCookie("id")}))
+}
 socket.onmessage = function(event) {
     try {
         const data = JSON.parse(event.data);
@@ -25,13 +30,25 @@ socket.onmessage = function(event) {
         return;
     }
 };
+socket.onclose = function(event) {
+    if (event.wasClean) {
+        alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+    } else {
+        // e.g. server process killed or network down
+        // event.code is usually 1006 in this case
+        alert('[close] Connection died');
+    }
+};
+socket.onerror = function(error) {
+    alert(`[error]` + error.message);
+};
 
 function send_movement(movement) {
-    socket.send(JSON.stringify({"action":`${movement}`, "id":document.cookie}))
+    socket.send(JSON.stringify({"action":`${movement}`, "id":getCookie("id")}))
 }
 
 function send_knob(value) {
-    socket.send(JSON.stringify({"action":"knob", "id":document.cookie, "value":value}))
+    socket.send(JSON.stringify({"action":"knob", "id":getCookie("id"), "value":value}))
 }
 
 
