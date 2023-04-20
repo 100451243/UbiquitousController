@@ -23,12 +23,10 @@
 
 
 
-    let socket = new WebSocket("ws://localhost:8080");
+    let socket = new WebSocket(location.origin.replace(/^http/, 'ws'));
     socket.onopen = function(e) {
-        console.log("[open] Connection established");
-        console.log("Sending to server");
-        socket.send("My name is John");
-        socket.send(JSON.stringify({"action":"login", "id":document.cookie}))
+        console.log("[open] Connection established, Sending to server");
+        socket.send(JSON.stringify({"action":"waitLogin", "id":getCookie("id")}))
     };
     socket.onmessage = function(event) {
         console.log(`[message] Data received from server: ${event.data}`);

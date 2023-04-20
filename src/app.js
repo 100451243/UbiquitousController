@@ -9,17 +9,15 @@ const cookieParser = require('cookie-parser');
 const app = express();
 app.use(cookieParser());
 
+const createFilmList = require('./film-discovery.js');
+
 const storage = require('node-persist');
 storage.init( /* options ... */ );
 
-const hostname = '192.168.24.226';
-const port = 3000;
-
+const hostname = process.env.PHOSTNAME || "localhost";
+const port = process.env.PORT || 3000;
+const library_path = process.env.LIBRARY_PATH || "filmsLink";
 const dhtml = "/display-html";
-
-
-const createFilmList = require('./film-discovery.js');
-
 
 
 
@@ -30,8 +28,6 @@ const generateQR = async text => {        //we will call this with different id 
   } catch (err) {console.error(err)}
 }
 
-
-//users = {};
 
 const server3 = app.listen(port, hostname, () => {
     console.log('Server running at http://' + hostname + ':' + port + '/');
@@ -99,27 +95,36 @@ app.use(express.static(__dirname, {
 
 
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 8080 });
+// const wss = new WebSocket.Server({ port: 8080 });
+// new method allows to use the same port as the server, which is nice, but I don't understand why it works
+const {Server} = require('ws');
+const wss = new Server({server: server3});
 
-wss.on('connection', function connection(ws) {
-  console.log('Client connected');
+
+wss.on('connection', function connection(ws, req) {
+  console.log('Websockets Client connected');
+  let id;
 
   ws.on('message', function incoming(message) {
     console.log('Received message: %s', message);
     try {
       const data = JSON.parse(message);
-      if(data.action === "login") {
-        // today this will be implemented, I need to access mobile js file
-        //broadcast to all clients
-        // wss.clients.forEach(function each(client) {
-        //   if (client !== ws && client.readyState === WebSocket.OPEN) {
-        //     client.send(JSON.stringify({action: "reload", id: data.id}));
-        //   }
-        // });
+      if(data.action === "waitLogin") {  //this is waiting on the display
+        id = data.id;
+        if (storage.getItem(id) === "true") {
+          ws.send(JSON.stringify({action: "reload", id: id}));  //not sure bout this
+        }
+      }
+      if(data.action === "login") {  //this is the login from the mobile
+        wss.clients.forEach(function each(client) {
+          if (client !== ws && client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify({action: "reload", id: data.id}));
+          }
+        });
       }
       if(data.action === "requestFilms"){
         console.log("Will send films")
-        let films = createFilmList("filmsLink");
+        let films = createFilmList(library_path);
         ws.send(JSON.stringify({action: "films", films: films}));
       }
       if(data.action === "requestInstructions"){

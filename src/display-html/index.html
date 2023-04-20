@@ -39,11 +39,9 @@
 
 
 
-            let socket = new WebSocket("ws://localhost:8080");
+            let socket = new WebSocket(location.origin.replace(/^http/, 'ws'));
             socket.onopen = function(e) {
-                console.log("[open] Connection established");
-                console.log("Sending to server");
-                socket.send("My name is John");
+                console.log("[open] Connection established, Sending to server");
                 alert("Requesting films")
                 socket.send(JSON.stringify({"action":"requestFilms", "id":document.cookie}))
             };
