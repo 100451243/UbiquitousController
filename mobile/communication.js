@@ -8,11 +8,11 @@ window.getCookie = function(name) {
         return match[2];
     }
 }
-let socket = new WebSocket("ws://192.168.24.226:8080");
+let socket = new WebSocket(location.origin.replace(/^http/, 'ws'));
 socket.onmessage = function(event) {
     try {
         const data = JSON.parse(event.data);
-        if (data.id != getCookie("id")) {
+        if (data.id !== getCookie("id")) {
             return;
         }
         switch (data.action) {
@@ -22,10 +22,10 @@ socket.onmessage = function(event) {
                 break;
         }
     } catch (e) {
-        return;
+        console.log(e);
     }
 };
 
 function send_movement(movement) {
-    socket.send(JSON.stringify({"action":`${movement}`, "id":document.cookie}))
+    socket.send(JSON.stringify({"action":`${movement}`, "id":getCookie("id")}))
 }
