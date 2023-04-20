@@ -2,6 +2,7 @@
 
 // Shake detection
 window.addEventListener('devicemotion', handle_shake, false);
+window,addEventListener('orientationchange', handle_orientation, false);
 
 var xBefore, yBefore, zBefore, xAfter, yAfter, zAfter;
 var shake_threshold = 15;
@@ -25,6 +26,18 @@ function handle_shake(evt) {
     xBefore = xUp;
     yDown = yUp;
     zDown = zUp;
+}
+
+// Orientation detection
+var toggle_orientation = true;
+function handle_orientation(evt) {
+    if (window.innerHeight > window.innerWidth) {
+        send_movement("landscape");
+        animate_landscape_on();
+    } else {
+        send_movement("portrait");
+        animate_landscape_off();
+    }
 }
 
 

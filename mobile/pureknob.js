@@ -1189,7 +1189,7 @@ function create_knob() {
     // Set properties
     audio_knob.setProperty('angleStart', -0.75 * Math.PI);
     audio_knob.setProperty('angleEnd', 0.75 * Math.PI);
-    audio_knob.setProperty('colorFG', `${green}`);
+    audio_knob.setProperty('colorFG', `${orange}`);
     audio_knob.setProperty('trackWidth', 0.4);
     audio_knob.setProperty('valMin', 0);
     audio_knob.setProperty('valMax', 100);

@@ -24,8 +24,8 @@ function animate_tap(x_client, y_client, color){
     }, 300);
 }
 
-function animate_hold(){
-    window.navigator.vibrate([150, 75, 100]);
+function animate_hold(x_client, y_client){
+    window.navigator.vibrate([250]);
 }
 
 function animate_info_circle_open(){
@@ -68,4 +68,24 @@ function animate_zoom_out(){
         zoom_out.style.display = "none";
         zoom_out.style.animation = "";
     }, 500);
+}
+var toggle_land = false;
+function animate_landscape_on(){
+    let landscape = document.querySelector("#main-screen-landscape");
+    let text = document.querySelector("#main-screen-landscape > h1");
+    if (toggle_land){
+        toggle_land = false;
+        text.innerHTML = "Gira para desactivar subtítulos";
+        text.style.animation = "textAnimation 0.5s ease-in";
+    }else{
+        toggle_land = true;
+        text.innerHTML = "Gira para activar subtítulos";
+        text.style.animation = "textAnimation 0.5s ease-in";
+    }
+    landscape.style.display = "flex";
+}
+
+function animate_landscape_off(){
+    let landscape = document.querySelector("#main-screen-landscape");
+    landscape.style.display = "none";
 }

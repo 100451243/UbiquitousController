@@ -17,6 +17,7 @@ var showing_knob = false;
 const carmine = "#ee6b6e";
 const yellow = "#e0d162";
 const green = "#77c16c";
+const orange = "#ee7752";
 
 var x1Down = null;                                                        
 var y1Down = null;                        
@@ -35,7 +36,9 @@ function handle_touch_start(evt) {
         y2Down = evt.touches[1].clientY;
     } else {
         // Wait 1s before allowing a hold
-        hold_timeout = setTimeout(() => { hold_down(); }, 700);
+        var clientX = evt.changedTouches[0].clientX;
+        var clientY = evt.changedTouches[0].clientY;
+        hold_timeout = setTimeout(() => { hold_down(clientX, clientY); }, 700);
     }
 };
 
@@ -189,7 +192,7 @@ function double_tap(evt) {
 var hold_timeout;
 var hold_switch = false;
 // Hold event
-function hold_down() {
+function hold_down(x_client, y_client) {
     clearTimeout(tap_timeout);
     if (hold_switch){
         hold_switch = false;
@@ -201,7 +204,7 @@ function hold_down() {
             send_knob(value);
         });
     }
-    animate_hold();
+    animate_hold(x_client, y_client);
 }
 
 // Info circle

@@ -12,7 +12,7 @@ app.use(cookieParser());
 const storage = require('node-persist');
 storage.init( /* options ... */ );
 
-const hostname = '192.168.24.226';
+const hostname = '192.168.68.138';
 const port = 3000;
 
 const dhtml = "/display-html";
@@ -90,6 +90,23 @@ app.get('/mobile.css', async (req, res) => {
   let path2 = path.join(__dirname, '..', 'mobile', 'mobile.css');
   return res.sendFile(path2);
 })
+
+app.get('/pureknob.js', async (req, res) => {
+  let path2 = path.join(__dirname, '..', 'mobile', 'pureknob.js');
+  return res.sendFile(path2);
+})
+
+app.get('/movement_actions.js', async (req, res) => {
+  let path2 = path.join(__dirname, '..', 'mobile', 'movement_actions.js');
+  return res.sendFile(path2);
+})
+
+app.get('/communication.js', async (req, res) => {
+  let path2 = path.join(__dirname, '..', 'mobile', 'communication.js');
+  return res.sendFile(path2);
+})
+// the following code sends .css and .js files
+// the following code sends .css and .js files
 // the following code sends .css and .js files
 app.use(express.static(__dirname, {
   extensions: ['htm', 'png', 'jpg', 'jpeg', 'gif', 'css', 'js']
