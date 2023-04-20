@@ -1,4 +1,5 @@
 const http = require('http');
+let path = require('path');
 const QRCode = require('qrcode');
 const { v4: uuid, stringify} = require('uuid');
 const fs = require('fs');
@@ -11,7 +12,7 @@ app.use(cookieParser());
 const storage = require('node-persist');
 storage.init( /* options ... */ );
 
-const hostname = '127.0.0.1';
+const hostname = '192.168.24.226';
 const port = 3000;
 
 const dhtml = "/display-html";
@@ -71,10 +72,24 @@ app.get('/login', async (req, res) => {
             console.log("sent reload to client")
         }
     });
-  return res.sendFile(__dirname + dhtml + '/indexMobile.html');
+    let path2 = path.join(__dirname, '..', 'mobile', 'mobile.html');
+  return res.sendFile(path2);
 })
 
+app.get('/touch_actions.js', async (req, res) => {
+  let path2 = path.join(__dirname, '..', 'mobile', 'touch_actions.js');
+  return res.sendFile(path2);
+})
 
+app.get('/animations.js', async (req, res) => {
+  let path2 = path.join(__dirname, '..', 'mobile', 'animations.js');
+  return res.sendFile(path2);
+})
+
+app.get('/mobile.css', async (req, res) => {
+  let path2 = path.join(__dirname, '..', 'mobile', 'mobile.css');
+  return res.sendFile(path2);
+})
 // the following code sends .css and .js files
 app.use(express.static(__dirname, {
   extensions: ['htm', 'png', 'jpg', 'jpeg', 'gif', 'css', 'js']
@@ -106,6 +121,11 @@ wss.on('connection', function connection(ws) {
         console.log("Will send films")
         let films = createFilmList("filmsLink");
         ws.send(JSON.stringify({action: "films", films: films}));
+      }
+      if(data.action === "requestInstructions"){
+        console.log("Will send films")
+        //let films = createFilmList("filmsLink");
+        ws.send(JSON.stringify({action: "instructions", films: "Esto serían las instrucciones, funcionara?"}));
       }
     }
     catch (e) {
