@@ -1,3 +1,4 @@
 npm install --save qrcode
 npm install --save express
+npm install --save ws
  

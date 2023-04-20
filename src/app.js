@@ -21,12 +21,8 @@ const dhtml = "/display-html";
 const generateQR = async text => {        //we will call this with different id for different users
   try {
     await QRCode.toFile(__dirname +'qrcode.png', text)
-  }
-    catch (err) {
-    console.error(err)
-    }
+  } catch (err) {console.error(err)}
 }
-
 
 
 //users = {};
@@ -62,8 +58,14 @@ app.get('/login', async (req, res) => {
   const id = req.query.id;
   await storage.setItem(id, 'true')
   console.log('login of user with id %s', id)
-  //users[id] = "true";
-  //return res.sendFile(__dirname + '/indexIntro.html');
+  //broadcast to all clients
+    wss.clients.forEach(function each(client) {
+        if (client !== wss && client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify({action: "reload", id: id}));
+            console.log("sent reload to client")
+        }
+    });
+  return res.sendFile(__dirname + dhtml + '/indexMobile.html');
 })
 
 
@@ -72,6 +74,42 @@ app.use(express.static(__dirname, {
   extensions: ['htm', 'png', 'jpg', 'jpeg', 'gif', 'css', 'js']
 } ));
 
+
+
+
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', function connection(ws) {
+  console.log('Client connected');
+
+  ws.on('message', function incoming(message) {
+    console.log('Received message: %s', message);
+    try {
+      const data = JSON.parse(message);
+      if(data.action === "login") {
+        // today this will be implemented, I need to access mobile js file
+        //broadcast to all clients
+        // wss.clients.forEach(function each(client) {
+        //   if (client !== ws && client.readyState === WebSocket.OPEN) {
+        //     client.send(JSON.stringify({action: "reload", id: data.id}));
+        //   }
+        // });
+      }
+    }
+    catch (e) {
+      console.log("")
+    }
+  });
+
+  ws.on('close', function close() {
+    console.log('Client disconnected');
+  });
+  ws.on('error', function close() {
+    console.log('Client disconnected');
+  });
+
+});
 
 
 
