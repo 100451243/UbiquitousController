@@ -6,6 +6,13 @@ main_screen.addEventListener("touchmove", handle_touch_move, false);
 main_screen.addEventListener("click", tap, false);
 main_screen.addEventListener("dblclick", double_tap, false);
 
+var info_circle = document.querySelector("#info-circle");
+var modal_info = document.querySelector("#button-ok");
+info_circle.addEventListener("click", click_info, false);
+modal_info.addEventListener("click", exit_info, false);
+var showing_info = false;
+var showing_knob = false;
+
 const carmine = "#ee6b6e";
 const yellow = "#e0d162";
 const green = "#77c16c";
@@ -17,6 +24,7 @@ var y2Down = null;
 
 // Gets the position of the initial touch
 function handle_touch_start(evt) {
+    if (showing_info){ return;}
     const firstTouch = evt.touches[0]; 
     x1Down = firstTouch.clientX;                                      
     y1Down = firstTouch.clientY;
@@ -25,8 +33,8 @@ function handle_touch_start(evt) {
         x2Down = evt.touches[1].clientX;
         y2Down = evt.touches[1].clientY;
     }
-
-    hold_down(evt);
+    // Wait 500ms before allowing a hold
+    hold_timeout = setTimeout(() => { hold_down(); }, 700);
 };
 
 function handle_touch_end(evt) {
@@ -37,10 +45,10 @@ function handle_touch_end(evt) {
 // Classifies the movement of the finger
 var one_finger_swipe = true;
 function handle_touch_move(evt) {
-    if ( ! x1Down || ! y1Down ) {
+    clearTimeout(hold_timeout); 
+    if ( ! x1Down || ! y1Down || showing_knob) {
         return;
     }
-    clearTimeout(hold_timeout);
     var num_touches = evt.touches.length;
     if (num_touches === 2) {
         // Two fingers are touching the screen
@@ -76,11 +84,11 @@ function handle_two_fingers(evt){
 }
 
 function zoom_out(){
-    return;
+    animate_zoom_out();
 }
 
 function zoom_in(){
-    return;
+    animate_zoom_in();
 }
 
 // Classfies the movement of one finger
@@ -92,7 +100,6 @@ function handle_swipe(evt){
     var yDiff = y1Down - yUp;
 
     let swipe_threshold = 50;
-    console.log(Math.abs( xDiff ));
     // If the movement is less than the threshold, it is not a swipe
     if ( Math.abs(xDiff) + Math.abs(yDiff) < swipe_threshold || evt.touches.length > 1) {
         return;
@@ -137,24 +144,43 @@ function down_swipe(){
 }
 
 var tap_timeout;
+// Tap event
 function tap(evt) {
+    if (showing_info){return;}
     tap_timeout = setTimeout(() =>{
         animate_tap(evt.clientX, evt.clientY, yellow);
     }, 100);
 };
 
-
+// Double tap event
 function double_tap(evt) {
+    if (showing_info){ return;}
     clearTimeout(tap_timeout);
     animate_tap(evt.clientX, evt.clientY, carmine); 
 };
 
 var hold_timeout;
-var min_hold_time = 700;
-var hold_switch = false;
-function hold_down(evt) {
+// Hold event
+function hold_down() {
     clearTimeout(tap_timeout);
-    hold_timeout = setTimeout(() => {
-        animate_hold();
-    }, min_hold_time);
+    if (showing_knob){
+        showing_knob = false;
+    } else {
+        showing_knob = true;
+    }
+    animate_hold();
+}
+
+// Info circle
+function click_info(evt) {
+    if (!showing_info) {
+        showing_info = true;
+        animate_info_circle_open();
+    } 
+}
+
+// Exit info
+function exit_info() {
+    setTimeout(() => { showing_info = false;} , 500);
+    animate_info_circle_close();
 }

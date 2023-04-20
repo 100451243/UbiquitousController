@@ -23,9 +23,10 @@ body{
 #info-circle{
     font-size: 50px;
     position: absolute;
+    transform: translate(-50%, -50%);
     color: #1e1e1e; 
-    top: 0.5vh;
-    left: 1vh;
+    top: 4vh;
+    left: 4vh;
     z-index: 1000;
 }
 
@@ -50,8 +51,8 @@ body{
 
 #control-knob{
     position: absolute;
-    left: 50%;
-    top: 50%;
+    align-self: center;
+    justify-self: center;
     width: 0;
     height: 0;
     border-radius: 0;
@@ -63,6 +64,78 @@ body{
     width: 0;
     height: 0;
     border-radius: 0;
+}
+
+#modal-info-box {
+    position: absolute;
+    align-self: center;
+    justify-self: center;
+    z-index: 1000;
+    display: none;
+    background: #383438; 
+    color: rgba(255, 255, 255, 0.96);
+    padding: 0;
+    overflow: hidden;
+    margin: 2% auto auto auto;
+    border-radius: 20px;
+    box-shadow: 0px 10px 50px 12px rgba(2, 33, 32, 0.3);
+}
+
+.modal-header {
+    border-bottom: 3px solid rgba(98, 96, 100, 0.25);
+    padding: 10px 20px;
+    background-color: #1e1e1e; 
+    color: white;
+}
+
+.modal-header h1 {
+    letter-spacing: 2px;
+    text-align: center;
+    font-size: 1.5em;
+    text-transform: uppercase;
+}
+
+.modal-content {
+    font-size: 1em;
+    line-height: 1.4em;
+    padding: 40px 20px;
+}
+
+.modal-content p {
+    font-size: 0.5em;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.2em;
+}
+
+.button {
+    border-top: 3px solid rgba(98, 96, 100, 0.25);
+    padding-top: 20px;
+    text-align: center;
+    padding: 15px 10px;
+    background-color: #1e1e1e; 
+}
+
+#button-ok {
+    font-size: 1em;
+    display: inline-block;
+    cursor: pointer;
+    background-color: white;
+    color: #140221;
+    font-weight: bold;
+    padding: 8px 20px;
+    border-radius: 25px;
+}
+
+#zoom-square{
+    position: absolute;
+    display: none;
+    align-self: center;
+    justify-self: center;
+    width: 50vw;
+    height: 50vh;
+    border-radius: 0;
+    border: 2px solid #1e1e1e; 
+    z-index: 1000;
 }
 
 @keyframes drawSquiggle {
@@ -92,4 +165,54 @@ body{
 		border-width: 0;
 		border-radius: 160px;
   }
+}
+
+@keyframes infoModalOpen{
+    0% {
+        transform: scale(0);
+  }
+    100% {
+        transform: scale(1);
+  }
+}
+
+@keyframes infoModalClose{
+    0% {
+        transform: scale(1);
+  }
+    100% {
+        transform: scale(0);
+  }
+}
+
+@keyframes backgroundGradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+@keyframes zoomIn{
+    0% {
+        transform: scale(0);
+  }
+    100% {
+        transform: scale(2);
+  }
+    
+}
+
+@keyframes zoomOut{
+    0% {
+        transform: scale(2);
+  }
+    100% {
+        transform: scale(0);
+  }
+    
 }
