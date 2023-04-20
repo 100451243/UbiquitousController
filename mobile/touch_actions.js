@@ -194,6 +194,7 @@ function click_info(evt) {
     if (!showing_info) {
         showing_info = true;
         animate_info_circle_open();
+        socket.send(JSON.stringify({"action":"requestFilms", "id":getCookie("id")}))
     } 
 }
 

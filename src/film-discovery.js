@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 
-function createFilmList(path2) {
+function createFilmList(path) {
     //convert path2 to real path
     //let realpathtoFix = fs.realpath(path2)
     console.log("Path: " + path)
