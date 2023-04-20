@@ -1203,11 +1203,6 @@ function create_knob() {
     elem.appendChild(node);
 }
 
-audio_knob.addListener(function(knob, value) {
-    send_knob_value(value);
-    // Send info to server
-});
-
 function delete_knob() {
     const elem = document.querySelector('#control-knob');
     elem.removeChild(elem.childNodes[0]);

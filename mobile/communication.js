@@ -8,7 +8,8 @@ window.getCookie = function(name) {
         return match[2];
     }
 }
-let socket = new WebSocket("ws://192.168.24.226:8080");
+
+let socket = new WebSocket(location.origin.replace(/^http/, 'ws'));
 socket.onmessage = function(event) {
     try {
         const data = JSON.parse(event.data);
@@ -17,7 +18,6 @@ socket.onmessage = function(event) {
         }
         switch (data.action) {
             case "info":
-                var info_box = document.querySelector("#modal-info-box");
                 document.querySelector(".modal-content").innerHTML = data.films;
                 break;
         }
@@ -29,3 +29,9 @@ socket.onmessage = function(event) {
 function send_movement(movement) {
     socket.send(JSON.stringify({"action":`${movement}`, "id":document.cookie}))
 }
+
+function send_knob(value) {
+    socket.send(JSON.stringify({"action":"knob", "id":document.cookie, "value":value}))
+}
+
+

@@ -96,20 +96,20 @@ function zoom_out(){
     if (!zoom_wait){
         zoom_wait = true;
         animate_zoom_out();
+        send_movement("zoom_out");
         // Wait 500ms before allowing another zoom
-        setTimeout(() => {zoom_wait = false;}, 500);
+        setTimeout(() => {zoom_wait = false;}, 1000);
     }
-    send_movement("zoom_out");
 }
 
 function zoom_in(){
     if (!zoom_wait){
         zoom_wait = true;
         animate_zoom_in();
+        send_movement("zoom_in");
         // Wait 500ms before allowing another zoom
-        setTimeout(() => {zoom_wait = false;}, 500);
+        setTimeout(() => {zoom_wait = false;}, 1000);
     }
-    send_movement("zoom_in");
 }
 
 // Classfies the movement of one finger
@@ -197,6 +197,9 @@ function hold_down() {
     } else {
         hold_switch = true;
         create_knob();
+        audio_knob.addListener(function(knob, value) {
+            send_knob(value);
+        });
     }
     animate_hold();
 }
@@ -216,3 +219,4 @@ function exit_info() {
     setTimeout(() => { showing_info = false;} , 500);
     animate_info_circle_close();
 }
+
