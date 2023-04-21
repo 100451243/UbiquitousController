@@ -14,15 +14,10 @@ const createFilmList = require('./film-discovery.js');
 const storage = require('node-persist');
 storage.init( /* options ... */ );
 
-<<<<<<< HEAD
 const hostname = process.env.PHOSTNAME || "localhost";
 const port = process.env.PORT || 3000;
 const library_path = process.env.LIBRARY_PATH || "filmsLink";
-=======
-const hostname = '192.168.68.138';
-const port = 3000;
 
->>>>>>> mobile
 const dhtml = "/display-html";
 
 actions = ["zoom_out", "zoom_in", "left-swipe", "right-swipe", "up-swipe", "down-swipe", "tap", "double-tap", "info"]
