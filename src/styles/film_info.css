@@ -37,8 +37,36 @@ video {
     font-size: 30px;
 }
 
+#film_info {
+    display: flex;
+}
+
 #video_player {
+    width: 60%;
     text-align: center;
+}
+#player {
+    width: 100%;
+}
+
+#additional_info {
+    width: 40%;
+}
+
+#year_info {
+    display: flex;
+    width: 100%;
+}
+#year_info > p {
+    margin-left: 20px;
+}
+
+#director_info {
+    display: flex;
+    width: 100%;
+}
+#director_info > p {
+    margin-left: 20px;
 }
 
 #description{
