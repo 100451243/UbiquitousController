@@ -1200,10 +1200,12 @@ function create_knob() {
     // Create element node
     const node = audio_knob.node();
     const elem = document.querySelector('#control-knob');
+	showing_knob = true;
     elem.appendChild(node);
 }
 
 function delete_knob() {
     const elem = document.querySelector('#control-knob');
+	showing_knob = false;
     elem.removeChild(elem.childNodes[0]);
 }

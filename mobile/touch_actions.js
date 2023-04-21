@@ -18,6 +18,7 @@ const carmine = "#ee6b6e";
 const yellow = "#e0d162";
 const green = "#77c16c";
 const orange = "#ee7752";
+const blue = "#4e7dd3";
 
 var x1Down = null;                                                        
 var y1Down = null;                        
@@ -36,9 +37,7 @@ function handle_touch_start(evt) {
         y2Down = evt.touches[1].clientY;
     } else {
         // Wait 1s before allowing a hold
-        var clientX = evt.changedTouches[0].clientX;
-        var clientY = evt.changedTouches[0].clientY;
-        hold_timeout = setTimeout(() => { hold_down(clientX, clientY); }, 700);
+        hold_timeout = setTimeout(() => { hold_down(); }, 700);
     }
 };
 
@@ -51,9 +50,10 @@ function handle_touch_end(evt) {
 var one_finger_swipe = true;
 function handle_touch_move(evt) {
     clearTimeout(hold_timeout); 
-    if ( ! x1Down || ! y1Down || showing_knob) {
+    if ( ! x1Down || ! y1Down || showing_info || showing_knob) {
         return;
     }
+    if (showing_info){ return;}
     var num_touches = evt.touches.length;
     if (num_touches === 2) {
         // Two fingers are touching the screen
@@ -68,6 +68,7 @@ function handle_touch_move(evt) {
 };
 
 // Classifies the movement of two fingers
+let last_distance = 0;
 function handle_two_fingers(evt){
     clearTimeout(hold_timeout);
     var x1Up = evt.touches[0].clientX;
@@ -81,8 +82,8 @@ function handle_two_fingers(evt){
     var distance_difference = release_distance - initial_distance;
     
     // Threshold for distance
-    let two_finger_threshold = 100;
-    if (Math.abs(distance_difference) < two_finger_threshold){
+    let two_finger_threshold = 120;
+    if (Math.abs(distance_difference - last_distance) < two_finger_threshold){
         return;
     }
 
@@ -92,6 +93,8 @@ function handle_two_fingers(evt){
     } else {
         zoom_out();
     }
+    // Reset values
+    last_distance = distance_difference;
 }
 
 var zoom_wait = false;
@@ -101,7 +104,7 @@ function zoom_out(){
         animate_zoom_out();
         send_movement("zoom_out");
         // Wait 500ms before allowing another zoom
-        setTimeout(() => {zoom_wait = false;}, 1000);
+        setTimeout(() => {zoom_wait = false;}, 300);
     }
 }
 
@@ -111,7 +114,7 @@ function zoom_in(){
         animate_zoom_in();
         send_movement("zoom_in");
         // Wait 500ms before allowing another zoom
-        setTimeout(() => {zoom_wait = false;}, 1000);
+        setTimeout(() => {zoom_wait = false;}, 300);
     }
 }
 
@@ -173,7 +176,7 @@ function down_swipe(){
 var tap_timeout;
 // Tap event
 function tap(evt) {
-    if (showing_info){return;}
+    if (showing_info || showing_knob){return;}
     tap_timeout = setTimeout(() =>{
         animate_tap(evt.clientX, evt.clientY, green);
     }, 100);
@@ -182,7 +185,7 @@ function tap(evt) {
 
 // Double tap event
 function double_tap(evt) {
-    if (showing_info){return;}
+    if (showing_info || showing_knob){return;}
     // Cancel the tap event
     clearTimeout(tap_timeout);
     animate_tap(evt.clientX, evt.clientY, carmine); 
@@ -192,7 +195,7 @@ function double_tap(evt) {
 var hold_timeout;
 var hold_switch = false;
 // Hold event
-function hold_down(x_client, y_client) {
+function hold_down() {
     clearTimeout(tap_timeout);
     if (hold_switch){
         hold_switch = false;
@@ -204,7 +207,7 @@ function hold_down(x_client, y_client) {
             send_knob(value);
         });
     }
-    animate_hold(x_client, y_client);
+    animate_hold();
 }
 
 // Info circle
