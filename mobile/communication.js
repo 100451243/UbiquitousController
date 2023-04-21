@@ -12,13 +12,13 @@ window.getCookie = function(name) {
 let socket = new WebSocket(location.origin.replace(/^http/, 'ws'));
 
 socket.onopen = function() {
-    alert("Connected to server");
+    alert(getCookie("id"));
     socket.send(JSON.stringify({"action":"validated", "id":getCookie("id")}))
 }
 socket.onmessage = function(event) {
     try {
         const data = JSON.parse(event.data);
-        if (data.id != getCookie("id")) {
+        if (data.id !== getCookie("id")) {
             return;
         }
         switch (data.action) {
@@ -27,7 +27,7 @@ socket.onmessage = function(event) {
                 break;
         }
     } catch (e) {
-        return;
+        console.log("Error when receiving message")
     }
 };
 socket.onclose = function(event) {
@@ -38,6 +38,9 @@ socket.onclose = function(event) {
         // event.code is usually 1006 in this case
         alert('[close] Connection died');
     }
+    console.log("It should not be possible to detect this")
+    socket.send(JSON.stringify({action: "disconnect", id: getCookie("id")}));
+    window.close();
 };
 socket.onerror = function(error) {
     alert(`[error]` + error.message);
