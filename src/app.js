@@ -14,9 +14,15 @@ const createFilmList = require('./film-discovery.js');
 const storage = require('node-persist');
 storage.init( /* options ... */ );
 
+<<<<<<< HEAD
 const hostname = process.env.PHOSTNAME || "localhost";
 const port = process.env.PORT || 3000;
 const library_path = process.env.LIBRARY_PATH || "filmsLink";
+=======
+const hostname = '192.168.68.138';
+const port = 3000;
+
+>>>>>>> mobile
 const dhtml = "/display-html";
 
 actions = ["zoom_out", "zoom_in", "left-swipe", "right-swipe", "up-swipe", "down-swipe", "tap", "double-tap", "info"]
@@ -91,7 +97,17 @@ app.get('/pureknob.js', async (req, res) => {
   return res.sendFile(path2);
 })
 
+app.get('/movement_actions.js', async (req, res) => {
+  let path2 = path.join(__dirname, '..', 'mobile', 'movement_actions.js');
+  return res.sendFile(path2);
+})
 
+app.get('/communication.js', async (req, res) => {
+  let path2 = path.join(__dirname, '..', 'mobile', 'communication.js');
+  return res.sendFile(path2);
+})
+// the following code sends .css and .js files
+// the following code sends .css and .js files
 // the following code sends .css and .js files
 app.use(express.static(__dirname, {
   extensions: ['htm', 'png', 'jpg', 'jpeg', 'gif', 'css', 'js']

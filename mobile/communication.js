@@ -1,5 +1,5 @@
 // Source file for the communication between the mobile app and the server
-
+var context = null;
 // Obtain the cookie from the browser
 window.getCookie = function(name) {
     // Split cookie string and get all individual name=value pairs in an array
@@ -23,7 +23,7 @@ socket.onmessage = function(event) {
         }
         switch (data.action) {
             case "info":
-                document.querySelector(".modal-content").innerHTML = data.films;
+                context = data.context;
                 break;
         }
     } catch (e) {
