@@ -30,21 +30,6 @@ socket.onmessage = function(event) {
         console.log("Error when receiving message")
     }
 };
-socket.onclose = function(event) {
-    if (event.wasClean) {
-        alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-    } else {
-        // e.g. server process killed or network down
-        // event.code is usually 1006 in this case
-        alert('[close] Connection died');
-    }
-    console.log("It should not be possible to detect this")
-    socket.send(JSON.stringify({action: "disconnect", id: getCookie("id")}));
-    window.close();
-};
-socket.onerror = function(error) {
-    alert(`[error]` + error.message);
-};
 
 function send_movement(movement) {
     socket.send(JSON.stringify({"action":`${movement}`, "id":getCookie("id")}))
