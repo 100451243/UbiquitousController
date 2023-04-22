@@ -6,6 +6,7 @@ const sinopsis = document.getElementById("sinopsis");
 const info = document.getElementById("info");
 const poster_image = document.getElementById("poster_image");
 const movie = document.getElementById("movie");
+const like_button = document.getElementById("like-button");
 
 // On load, get the movie info
 window.onload = function() { display_movie_info("movie") };
@@ -25,13 +26,12 @@ function display_movie_info(movie) {
     // info.innerHTML = "Género: " + movie.metadata.genre + "<span>|</span>" + "Año: " + movie.metadata.year + "<span>|</span>"  + "Director: " + movie.metadata.director
     info.innerHTML = "Género: XXX" + "<span>|</span>" + "Año: XXX" + "<span>|</span>"  + "Director: XXX"
     setTimeout (function() {
-        play_pause();
+        like_dislike();
     }, 1000);
 }
 
 function calculate_star_rating(rating) {
     // Map 1 tp 10 to 1 to 5
-
     let stars = Math.round(rating / 2);
     let icons = ratings.children;
     for (let i = 0; i < icons.length; i++) {
@@ -46,10 +46,14 @@ function calculate_star_rating(rating) {
 }
 
 
-var video = document.getElementById("player");
-
 function zoom_in() {
-    // video.style.width = "100vw";
+    movie.style.width = "100vw";
+    movie.style.height = "100vh";
+    movie.style.top = "0";
+    movie.style.left = "0";
+    movie.style.position = "fixed";
+    movie.style.transform = "translate(0, 0)";
+    movie.style.zIndex = "1000";
 }
 
 function zoom_out() {
@@ -57,11 +61,11 @@ function zoom_out() {
 }
 
 function fast_forward () {
-    video.currentTime += 10;
+    //video.currentTime += 10;
 }
 
 function restart () {
-    video.currentTime = 0;
+    //video.currentTime = 0;
 }
 
 function play_pause () {
@@ -75,12 +79,22 @@ function play_pause () {
 
         }, 300);
     }
-
-    if (video.paused){
-        video.play();
+    /*
+    if (movie.paused){
+        movie.play();
        
     } else {
-        video.pause(); 
+        movie.pause(); 
     }
+    */
 }
 
+like_dislike = function() {
+    if (like_button.className == "fa fa-heart heart-inactive") {
+        like_button.className = "fa fa-heart heart-active";
+        like_button.style.animation = "likeAnimation 0.3s ease-out forwards"
+    } else {
+        like_button.className = "fa fa-heart heart-inactive";
+        like_button.style.animation = "likeAnimation 0.3s ease-out forwards"
+    }
+}

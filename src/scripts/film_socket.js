@@ -48,6 +48,7 @@ socket.onmessage = function(event) {
                 break;
             case "tap":
                 // Tap
+                play_pause();
                 break;
             case "double-tap":
                 // Double tap
