@@ -26,8 +26,13 @@ function display_movie_info(movie) {
     // info.innerHTML = "Género: " + movie.metadata.genre + "<span>|</span>" + "Año: " + movie.metadata.year + "<span>|</span>"  + "Director: " + movie.metadata.director
     info.innerHTML = "Género: XXX" + "<span>|</span>" + "Año: XXX" + "<span>|</span>"  + "Director: XXX"
     setTimeout (function() {
-        like_dislike();
+        play_pause();
     }, 1000);
+    setTimeout (function() {
+        subtitles();
+    }, 2000);
+    
+    
 }
 
 function calculate_star_rating(rating) {
@@ -45,6 +50,8 @@ function calculate_star_rating(rating) {
     return stars;
 }
 
+var video_x = movie.style.left;
+var video_y = movie.style.top;
 
 function zoom_in() {
     movie.style.width = "100vw";
@@ -57,15 +64,25 @@ function zoom_in() {
 }
 
 function zoom_out() {
-    //video.style.width = "50%";
+    movie.style.width = "500px";
+    movie.style.height = "300px";
+    movie.style.transform = "translate(-175px, 0)";
+    movie.style.borderRadius = "0.5em";
+    movie.style.top = video_y;
+    movie.style.left = video_x;
+    movie.style.position = "relative";
 }
 
 function fast_forward () {
-    //video.currentTime += 10;
+    movie.currentTime += 10;
+}
+
+function rewind () {
+    movie.currentTime -= 10;
 }
 
 function restart () {
-    //video.currentTime = 0;
+    movie.currentTime = 0;
 }
 
 function play_pause () {
@@ -76,25 +93,36 @@ function play_pause () {
             movie.style.display = "block";
             movie.style.animation = "videoAnimation 0.3s ease-out forwards"
             poster_image.style.display = "none";
-
+            
         }, 300);
     }
-    /*
+
     if (movie.paused){
         movie.play();
-       
     } else {
         movie.pause(); 
     }
-    */
 }
 
 like_dislike = function() {
+    like_button.style.animation = "likeAnimation 0.3s ease-out infinite"
+    setTimeout(() => { like_button.style.animation = ""; }, 300);
     if (like_button.className == "fa fa-heart heart-inactive") {
         like_button.className = "fa fa-heart heart-active";
-        like_button.style.animation = "likeAnimation 0.3s ease-out forwards"
     } else {
         like_button.className = "fa fa-heart heart-inactive";
-        like_button.style.animation = "likeAnimation 0.3s ease-out forwards"
     }
+}
+
+function volume (vol) {
+    movie.volume = vol / 100;
+}
+
+function exit_film () {
+    window.location.href = "../display-html/index.html"
+}
+
+function subtitles () {
+    let subs = document.getElementById("subs");
+    subs.src = "./The.Matrix.1999.1080p.BrRip.x264.YIFY.eng.srt"
 }

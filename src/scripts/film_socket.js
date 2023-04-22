@@ -29,16 +29,16 @@ socket.onmessage = function(event) {
                 display_movie(info);
                 break;
             case "zoom-in":
-                // Zoom in
+                zoom_in();
                 break;
             case "zoom-out":
-                // Zoom out
+                zoom_out();
                 break;
             case "left-swipe":
-                // Swipe left
+                rewind();
                 break;
             case "right-swipe":
-                // Swipe right
+                fast_forward();
                 break;
             case "up-swipe":
                 // Swipe up
@@ -47,17 +47,16 @@ socket.onmessage = function(event) {
                 // Swipe down
                 break;
             case "tap":
-                // Tap
                 play_pause();
                 break;
             case "double-tap":
-                // Double tap
+                like_dislike();
                 break;
             case "knob":
-                // Knob
+                volume(data.value);
                 break;
             case "shake":
-                // Shake
+                exit_film();
                 break;
             case "landscape":
                 // Landscape
