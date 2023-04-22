@@ -13,18 +13,17 @@ const like_button = document.getElementById("like-button");
 let first_tap = true;
 
 function display_movie_info(film) {
-    background.style.background = "url(../images/backdrop.jpg)";
+    background.style.background = "url(/filmsLink/" + film.foldername + "/landscape.jpg)";
     background.style.backgroundSize = "cover"
     sinopsis.innerHTML = film.metadata.plot;
     title.innerHTML = film.title;
     calculate_star_rating(film.metadata.rating);
-    info.innerHTML = "Género: " + film.metadata.genre + "<span>|</span>" + "Año: " + film.metadata.year + "<span>|</span>"  + "Director: " + film.metadata.director;
+    info.innerHTML = "Genre: " + film.metadata.genre + "<span>|</span>" + "Year: " + film.metadata.year + "<span>|</span>"  + "Director: " + film.metadata.director;
     setTimeout (function() {
         play_pause();
     }, 1000);
-    setTimeout (function() {
-        subtitles();
-    }, 2000);
+    movie.src = "/filmsLink/" + film.foldername + "/" + film.file;
+    
     //to modify background:
     //let backdrop = "url(/filmsLink/" + film.foldername + "/landscape.jpg)";
     //background.style.background = backdrop;  no funciona, en indexintro tb tuve un problema parecido, si no lo consigues arreglar lo intento mañana
