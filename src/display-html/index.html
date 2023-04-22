@@ -3,10 +3,7 @@
     <head>
         <base href=".">
         <meta charset="utf-8">
-        <title>La mejor web de películas</title>
-
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <title>Noflix, películas a la carta</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
@@ -147,7 +144,7 @@
                     if(data.action === "tap"){
                         if (selected === undefined) {
                             console.log("Nothing selected");
-                        }else{
+                        }else if(0>5){
                             console.log("begin playing")
                             let title_image = document.createElement("img");
                             title_image.src = "filmsLink/" + films[selected].foldername + "/clearart.png";
@@ -174,6 +171,10 @@
                             container.appendChild(plot);
                             document.body.innerHTML = container.outerHTML;
                         }
+                        else{
+                            document.location.href = "film_info?film=" + selected + "&id=" + getCookie("id");
+                        }
+
                     }
                     if(data.action === "disconnect"){
                         document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";

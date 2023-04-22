@@ -5,28 +5,37 @@ window.getCookie = function(name) {
         return match[2];
     }
 }
+let films = [];
+
+function fulfill_film_info() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const filmID = urlParams.get('film');
+    display_movie_info(films[filmID]);
+}
 
 let socket = new WebSocket(location.origin.replace(/^http/, 'ws'));
 
 socket.onopen = function() {
     alert(getCookie("id"));
     socket.send(JSON.stringify({"action":"validated", "id":getCookie("id")}))
+    socket.send(JSON.stringify({"action":"requestFilmsBeforeLogin", "id":getCookie("id")}))
 }
 socket.onmessage = function(event) {
     try {
         const data = JSON.parse(event.data);
-        if (data.id !== getCookie("id")) {
-            return;
-        }
+        // if (data.id !== getCookie("id")) {
+        //     return;
+        // }
         switch (data.action) {
             case "info":
                 // Send the context into the server
                 send_context("movie");
                 break;
-            case "film-info":
+            case "filmsInfo":
                 // All data from the movie from the movie
-                let film = JSON.parse(data.film);
-                display_movie(info);
+                films = data.films;
+                fulfill_film_info();
                 break;
             case "zoom-in":
                 zoom_in();

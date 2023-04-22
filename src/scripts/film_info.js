@@ -9,29 +9,29 @@ const movie = document.getElementById("movie");
 const like_button = document.getElementById("like-button");
 
 // On load, get the movie info
-window.onload = function() { display_movie_info("movie") };
+//window.onload = function() { display_movie_info("movie") };  //this is going to be executed only when the film is received on film_socket.js
 let first_tap = true;
 
-function display_movie_info(movie) {
-    //player.poster = "filmsLink/" + movie.foldername + "/landscape.jpg";
-    //banner.style.background = "url(filmsLink/" + movie.foldername + "/backdrop.jpg)";
+function display_movie_info(film) {
     background.style.background = "url(../images/backdrop.jpg)";
     background.style.backgroundSize = "cover"
-    // sinopsis.innerHTML = movie.metadata.plot
-    sinopsis.innerHTML = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-    // title.innerHTML = movie.title;
-    title.innerHTML = "Titulo";
-    // calculate_star_rating(movie.metadata.rating);
-    calculate_star_rating(3);
-    // info.innerHTML = "Género: " + movie.metadata.genre + "<span>|</span>" + "Año: " + movie.metadata.year + "<span>|</span>"  + "Director: " + movie.metadata.director
-    info.innerHTML = "Género: XXX" + "<span>|</span>" + "Año: XXX" + "<span>|</span>"  + "Director: XXX"
+    sinopsis.innerHTML = film.metadata.plot;
+    title.innerHTML = film.title;
+    calculate_star_rating(film.metadata.rating);
+    info.innerHTML = "Género: " + film.metadata.genre + "<span>|</span>" + "Año: " + film.metadata.year + "<span>|</span>"  + "Director: " + film.metadata.director;
     setTimeout (function() {
         play_pause();
     }, 1000);
     setTimeout (function() {
         subtitles();
     }, 2000);
-    
+    //to modify background:
+    //let backdrop = "url(/filmsLink/" + film.foldername + "/landscape.jpg)";
+    //background.style.background = backdrop;  no funciona, en indexintro tb tuve un problema parecido, si no lo consigues arreglar lo intento mañana
+    //background.style.background = "url(../filmsLink/"+ film.foldername + "/landscape.jpg)";
+
+    //to modify video element
+    // let video = "/filmsLink/" + film.foldername + "/" + film.file;
     
 }
 

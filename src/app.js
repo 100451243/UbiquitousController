@@ -67,6 +67,11 @@ app.get('/login', async (req, res) => {
   return res.sendFile(path.join(__dirname, '..', 'mobile', 'mobile.html'));
 })
 
+app.get('/film_info', async (req, res) => {
+  console.log("redirected to film_info page")
+  return res.sendFile(path.join(__dirname, dhtml, 'film_info.html'));
+});
+
 app.get('/touch_actions.js', async (req, res) => {
   let path2 = path.join(__dirname, '..', 'mobile', 'touch_actions.js');
   return res.sendFile(path2);
