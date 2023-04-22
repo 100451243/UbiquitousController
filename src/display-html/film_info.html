@@ -5,37 +5,36 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <title>Video player</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="../styles/film_info.css" rel="stylesheet" type="text/css" />
     </head>
 
     <body>
-        <div id="content">
-            <div id="title">
-                <img id="logo" src="" height="60" style="margin-right: 20px;">
-                <h2 id="name"></h2>
+        <section id="background"></section>
+        <div id="banner_content_wrapper">
+            <div id="poster">
+                <video id="movie" width="100%" height="100%" controls>
+                    <source src="https://www.dropbox.com/s/oxrbxi4b9dwv7yj/AmyCuddy_2012G-480p.mp4?dl=1" type="video/mp4">
+                </video>
+                <img src="https://res.cloudinary.com/dw369yzsh/image/upload/v1470917169/deadpool_wn1hwe.jpg" id="poster_image">
             </div>
-                <div id="film_info">
-                    <div id="video_player">
-                        <video id="player" controls="" poster=""></video>
-                    </div>
-                    <div id="additional_info">
-                        <div id="year_info">
-                            <h2>Año</h2>
-                            <p id="year"></p>
-                        </div>
-                        <div id="director_info">
-                            <h2>Director</h2>
-                            <p id="people"></p>
-                        </div>
-                    </div>
+            <div id="content">
+                <i class="fa fa-heart heart-inactive"></i>
+                <h2 id="title">Deadpool</h2>
+                <div id="ratings">
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                    <i></i>
                 </div>
-    
-            <div id="description">
-                <h2 id="argument"></h2>
+
                 <p id="sinopsis"></p>
+
+                <p id="info"></p>
             </div>
         </div>
-        <script src="../scripts/film_info.js"></script>
+    <script src="../scripts/film_info.js"></script>
     </body>
 
 </html>

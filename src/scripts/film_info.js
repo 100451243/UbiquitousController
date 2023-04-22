@@ -1,27 +1,48 @@
-const title = document.getElementById("name");
-
-const logo = document.getElementById("logo");
-
+const title = document.getElementById("title");
+const ratings = document.getElementById("ratings");
 const player = document.getElementById("player");
-
-const arg = document.getElementById("argument");
-arg.innerText = "Argumento";
-
-const year = document.getElementById("year");
-
-const director = document.getElementById("people");
-
-
+const background = document.getElementById("background");
 const sinopsis = document.getElementById("sinopsis");
-sinopsis.innerText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
+const info = document.getElementById("info");
+const poster_image = document.getElementById("poster_image");
+const movie = document.getElementById("movie");
+
+// On load, get the movie info
+window.onload = function() { display_movie_info("movie") };
+let first_tap = true;
 
 function display_movie_info(movie) {
-    logo.src = "filmsLink/" + movie.foldername + "/logo.png";
-    player.poster = "filmsLink/" + movie.foldername + "/landscape.jpg";
-    title.innerText = movie.title;
-    arg.innerText = movie.metadata.plot;
-    year.innerText = movie.metadata.year;
-    director.innerText = movie.metadata.director;
+    //player.poster = "filmsLink/" + movie.foldername + "/landscape.jpg";
+    //banner.style.background = "url(filmsLink/" + movie.foldername + "/backdrop.jpg)";
+    background.style.background = "url(../images/backdrop.jpg)";
+    background.style.backgroundSize = "cover"
+    // sinopsis.innerHTML = movie.metadata.plot
+    sinopsis.innerHTML = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    // title.innerHTML = movie.title;
+    title.innerHTML = "Titulo";
+    // calculate_star_rating(movie.metadata.rating);
+    calculate_star_rating(3);
+    // info.innerHTML = "Género: " + movie.metadata.genre + "<span>|</span>" + "Año: " + movie.metadata.year + "<span>|</span>"  + "Director: " + movie.metadata.director
+    info.innerHTML = "Género: XXX" + "<span>|</span>" + "Año: XXX" + "<span>|</span>"  + "Director: XXX"
+    setTimeout (function() {
+        play_pause();
+    }, 1000);
+}
+
+function calculate_star_rating(rating) {
+    // Map 1 tp 10 to 1 to 5
+
+    let stars = Math.round(rating / 2);
+    let icons = ratings.children;
+    for (let i = 0; i < icons.length; i++) {
+        if (i < stars) {
+            icons[i].className = "fa fa-star";
+        } else {
+            icons[i].className = "fa fa-star inactive";
+        }
+    }
+
+    return stars;
 }
 
 
@@ -44,8 +65,20 @@ function restart () {
 }
 
 function play_pause () {
+    if (first_tap) {
+        first_tap = false;
+        poster_image.style.animation = "posterAnimation 0.4s ease-out forwards"
+        setTimeout(function(){ 
+            movie.style.display = "block";
+            movie.style.animation = "videoAnimation 0.3s ease-out forwards"
+            poster_image.style.display = "none";
+
+        }, 300);
+    }
+
     if (video.paused){
         video.play();
+       
     } else {
         video.pause(); 
     }
