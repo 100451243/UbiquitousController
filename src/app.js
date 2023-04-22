@@ -168,6 +168,10 @@ wss.on('connection', function connection(ws, req) {
         let films = createFilmList(library_path);
         ws.send(JSON.stringify({action: "films", films: films}));
       }
+      if(data.action === "requestFilmsBeforeLogin"){
+        let films = createFilmList(library_path);
+        ws.send(JSON.stringify({action: "filmsInfo", films: films}));
+      }
       if(data.action === "info"){
         console.log("Will send films")
         //let films = createFilmList("filmsLink");
