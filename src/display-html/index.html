@@ -93,8 +93,8 @@
                         });
                     }
                     console.log(selected)
+                    let display = document.getElementById("card-columns");
                     if(data.action === "right-swipe"){
-                        let display = document.getElementById("card-columns");
                         if (selected === undefined) {
                             selected = 0;
                         } else if (selected < films.length - 1) {
@@ -102,9 +102,9 @@
                             selected++;
                         }
                         display.childNodes[selected].style.backgroundColor = "green";
+                        display.childNodes[selected].scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
                     }
                     if(data.action === "left-swipe"){
-                        let display = document.getElementById("card-columns");
                         if (selected === undefined) {
                             selected = 0;
                         } else if (selected > 0) {
@@ -112,34 +112,28 @@
                             selected--;
                         }
                         display.childNodes[selected].style.backgroundColor = "red";
+                        display.childNodes[selected].scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
                     }
+                    let movement = Math.ceil(window.innerWidth / 300)-1;
                     if(data.action === "up-swipe"){
-                        let display = document.getElementById("card-columns");
                         if (selected === undefined) {
                             selected = 0;
-                        } else if (selected > 2) {
+                        } else  {
                             display.childNodes[selected].style.backgroundColor = "white";
-                            selected-=2;
-                        }
-                        else{
-                            display.childNodes[selected].style.backgroundColor = "white";
-                            selected = 0;
+                            selected= selected - movement < 0 ? 0 : selected - movement;
                         }
                         display.childNodes[selected].style.backgroundColor = "red";
+                        display.childNodes[selected].scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
                     }
                     if(data.action === "down-swipe"){
-                        let display = document.getElementById("card-columns");
                         if (selected === undefined) {
-                            selected = 1;
-                        } else if (selected < films.length - 2) {
+                            selected = 0;
+                        } else  {
                             display.childNodes[selected].style.backgroundColor = "white";
-                            selected+=2;
-                        }
-                        else{
-                            display.childNodes[selected].style.backgroundColor = "white";
-                            selected = films.length - 1;
+                            selected = selected + movement > films.length - 1 ? films.length - 1 : selected + movement;
                         }
                         display.childNodes[selected].style.backgroundColor = "green";
+                        display.childNodes[selected].scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
                     }
                     if(data.action === "tap"){
                         if (selected === undefined) {
