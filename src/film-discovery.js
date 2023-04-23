@@ -11,9 +11,9 @@ function createFilmList(given_path) {
         try {
             let film = {};
             film.foldername = folders[i];
-            film.path = path + folders[i];
+            film.path = given_path + folders[i];
 
-            let files = fs.readdirSync(path + folders[i]);
+            let files = fs.readdirSync(given_path + folders[i]);
 
             files.forEach(file => {
                 if (file.endsWith('.mp4') || file.endsWith('.mkv')) {
@@ -63,7 +63,6 @@ function createFilmList(given_path) {
     return filmList;
 }
 
-let path = "/home/adelpozoman/films/"
 
 //filmListasdf = createFilmList(path)
 

@@ -14,17 +14,19 @@ const srt2webvtt = require('./scripts/srt2webvtt.js');
 
 const storage = require('node-persist');
 storage.init( /* options ... */ );
-if (process.argv.length < 2){
-  console.log("Usage: node app.js <ip address>");
+
+if (process.argv.length < 5){
+  console.log("Usage: node app.js <ip address> <port> <path-to-movies>");
   process.exit(1);
 }
-else {
-  hostname = process.argv[2];
-}
 
-//const hostname = process.env.PHOSTNAME || "localhost";
-const port = process.env.PORT || 3000;
-const library_path = process.env.LIBRARY_PATH || "/Data/multimedia/movies";
+const hostname = process.argv[2];
+const port = process.argv[3];
+const library_path = process.argv[4];
+
+//const hostname = process.env.PHOSTNAME || "192.168.68.138";
+//const port = process.env.PORT || 3000;
+//const library_path = process.env.LIBRARY_PATH || "/Data/multimedia/movies";
 
 const dhtml = "/display-html";
 
@@ -45,7 +47,7 @@ const server3 = app.listen(port, hostname, () => {
 app.get('/', async (req, res) => {
   let id = req.cookies['id'];
   if (id === undefined) {
-    console.log(id)
+    console.log(id);
     //users[id = uuid().slice(0, 8)] = "false";
     storage.setItem(id = uuid().slice(0, 8), 'false')
     console.log('First visit of user, given id is: ' + id)
@@ -64,6 +66,10 @@ app.get('/', async (req, res) => {
   } else {
     console.log('Undefined behaviour');
     console.log(storage.getItem(id));
+    storage.setItem(id = uuid().slice(0, 8), 'false')
+    console.log('First visit of user, given id is: ' + id)
+    res.cookie('id', id);
+    return res.sendFile(__dirname + dhtml + '/indexIntro.html');
   }
 });
 
