@@ -41,7 +41,7 @@
             let socket = new WebSocket(location.origin.replace(/^http/, 'ws'));
             socket.onopen = function(e) {
                 console.log("[open] Connection established, Sending to server");
-                alert("Requesting films")
+                //alert("Requesting films")
                 socket.send(JSON.stringify({"action":"requestFilms", "id":getCookie("id")}))
                 socket.send(JSON.stringify({"action":"infoResponse", "id":getCookie("id"), "context":"menu"}))
 
@@ -52,10 +52,10 @@
                     const data = JSON.parse(event.data);
                     if (data.action === "reload" && data.id === getCookie("id")) {
                         document.location.reload();
-                        alert("reloading")
+                        //alert("reloading")
                     }
                     if (data.action === "films"){
-                        alert("films received")
+                        //alert("films received")
                         films = data.films;
 
                         let display = document.getElementById("card-columns");

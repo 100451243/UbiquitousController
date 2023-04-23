@@ -12,7 +12,7 @@ window.getCookie = function(name) {
 let socket = new WebSocket(location.origin.replace(/^http/, 'ws'));
 
 socket.onopen = function() {
-    alert(getCookie("id"));
+    //alert(getCookie("id"));
     socket.send(JSON.stringify({"action":"validated", "id":getCookie("id")}))
 }
 socket.onmessage = function(event) {
