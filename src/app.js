@@ -265,6 +265,7 @@ wss.on('connection', function connection(ws, req) {
   });
 
   ws.on('close', function close() {
+    clearInterval(pingInterval);
     console.log('Client disconnected on close');
     if(ws.id !== undefined) {
       if (ws.id.includes("phone")) {
@@ -287,6 +288,14 @@ wss.on('connection', function connection(ws, req) {
   });
 
 });
+
+const pingInterval = setInterval(() => {
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify({type: 'ping'}));
+    }
+  });
+}, 30000);
 
 
 
