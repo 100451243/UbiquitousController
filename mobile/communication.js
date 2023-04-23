@@ -28,9 +28,11 @@ socket.onmessage = function(event) {
                 context = data.context;
                 switch (context) {
                     case "movie":
+                        context = "movie";
                         display_cross(true);
                         break;
                     case "menu":
+                        context = "menu";
                         display_cross(false);
                 }
                 break;

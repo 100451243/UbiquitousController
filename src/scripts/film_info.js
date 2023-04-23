@@ -7,6 +7,7 @@ const info = document.getElementById("info");
 const poster_image = document.getElementById("poster_image");
 const movie = document.getElementById("movie");
 const like_button = document.getElementById("like-button");
+const content = document.getElementById("content");
 //const subs = document.getElementById("subs");
 
 // On load, get the movie info
@@ -23,11 +24,7 @@ function display_movie_info(film) {
     sinopsis.innerHTML = film.metadata.plot;
     info.innerHTML = "Genre: " + film.metadata.genre + "<span>|</span>" + "Duration: " + film.metadata.runtime+"m" + "<span>|</span>" + "Year: " + film.metadata.year + "<span>|</span>"  + "Director: " + film.metadata.director;
     poster_image.src = "/movies/" + film.foldername + "/folder.jpg";
-    document.getElementById("banner").src="/movies/" + film.foldername + "/banner.jpg";
     document.getElementById("logo").src="/movies/" + film.foldername + "/logo.png";
-    setTimeout (function() {
-        play_pause();
-    }, 1000);
 
     socket.send(JSON.stringify({"action":"convert","path":"/movies/" + film.foldername + "/" + film.subtitle}));
     console.log("sent request to convert subtitles");
@@ -97,7 +94,6 @@ function zoom_out() {
     document.body.style.backgroundImage = "url('/movies/" + filmed.foldername+"/backdrop.jpg')"
     movie.style.width = "1200px";
     movie.style.height = "600px";
-    movie.style.transform = "translate(-325px, 0)";
     movie.style.borderRadius = "0.5em";
     movie.style.top = video_y;
     movie.style.left = video_x;
@@ -122,13 +118,12 @@ function restart () {
 function play_pause () {
     if (first_tap) {
         first_tap = false;
-        poster_image.style.animation = "posterAnimation 1.6s ease-out forwards"
+        poster_image.style.animation = "posterAnimation 0.7s ease-out forwards"
         setTimeout(function(){ 
             movie.style.display = "block";
-            movie.style.animation = "videoAnimation 1.4s ease-out forwards"
-            poster_image.style.display = "none";
+            movie.style.animation = "videoAnimation 0.7s ease-out forwards"
             
-        }, 1000);
+        }, 350);
     }
 
     if (movie.paused){

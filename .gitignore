@@ -1,3 +1,6 @@
+src/movies
+src/.node-persist
+qrcode.png
 # Logs
 logs
 *.log

@@ -53,11 +53,6 @@ img {
     100% { transform: translate(0, 0) rotate(0deg); }
 }
 
-.card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    background-color: aqua;
-}
-
 .card-title{
     font-family: Impact;
 }

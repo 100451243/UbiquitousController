@@ -125,6 +125,7 @@ body{
     justify-self: center;
     z-index: 1000;
     display: none;
+    max-width: 80vw;
     background: #383438; 
     color: rgba(255, 255, 255, 0.96);
     padding: 0;

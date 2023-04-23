@@ -33,11 +33,11 @@ function animate_info_circle_open(){
     let modal_info = document.querySelector("#modal-info-box");
     let info_msg = document.querySelector(".modal-content");
     if (context == "menu"){
-        info_msg.innerHTML = "Estás en el menú principal.";
+        info_msg.innerHTML = "- Swipe your finger to any direction to navigate <br> - Tap to select a movie";
     } else if (context == "movie"){
-        info_msg.innerHTML = "Estás viendo la película.";
+        info_msg.innerHTML = "- Hold the screen to open the volume knob <br> - Swipe left or right to increment time by a little, slide up and down for greater increments <br> - Pinch to zoom in/out <br> - Tap to play/pause <br> - Double tap to like/dislike <br> - Turn your phone sidways and back to portrait mode to activate subtitles <br> - Tap the cross or shake the phone to exit";
     } else{
-        info_msg.innerHTML = "Esperando al servidor...";
+        info_msg.innerHTML = "Waiting for the server...";
     }
 
     // Animate the change
