@@ -22,22 +22,22 @@ function display_movie_info(film) {
     document.getElementById("tagline").innerHTML = film.metadata.tagline;
     sinopsis.innerHTML = film.metadata.plot;
     info.innerHTML = "Genre: " + film.metadata.genre + "<span>|</span>" + "Duration: " + film.metadata.runtime+"m" + "<span>|</span>" + "Year: " + film.metadata.year + "<span>|</span>"  + "Director: " + film.metadata.director;
-    poster_image.src = "/filmsLink/" + film.foldername + "/folder.jpg";
-    document.getElementById("banner").src="/filmsLink/" + film.foldername + "/banner.jpg";
-    document.getElementById("logo").src="/filmsLink/" + film.foldername + "/logo.png";
+    poster_image.src = "/movies/" + film.foldername + "/folder.jpg";
+    document.getElementById("banner").src="/movies/" + film.foldername + "/banner.jpg";
+    document.getElementById("logo").src="/movies/" + film.foldername + "/logo.png";
     setTimeout (function() {
         play_pause();
     }, 1000);
 
-    socket.send(JSON.stringify({"action":"convert","path":"/filmsLink/" + film.foldername + "/" + film.subtitle}));
+    socket.send(JSON.stringify({"action":"convert","path":"/movies/" + film.foldername + "/" + film.subtitle}));
     console.log("sent request to convert subtitles");
 
-    movie.src = "/filmsLink/" + film.foldername + "/" + film.file;
+    movie.src = "/movies/" + film.foldername + "/" + film.file;
 
-    document.body.style.backgroundImage = "url('/filmsLink/" + film.foldername+"/backdrop.jpg')"
+    document.body.style.backgroundImage = "url('/movies/" + film.foldername+"/backdrop.jpg')"
     document.body.style.backdropFilter = "blur(5px)";
     document.body.style.backgroundRepeat = "no-repeat";
-    background.style.backgroundImage = "url(/filmsLink/" + film.foldername + "/landscape.jpg)";
+    background.style.backgroundImage = "url(/movies/" + film.foldername + "/landscape.jpg)";
     background.style.backgroundSize = "cover"
     
 }
@@ -48,7 +48,7 @@ function fill_subtitles(){
     subtitles.kind = "subtitles";
     subtitles.label = "English";
     subtitles.srclang = "en";
-    subtitles.src = "/filmsLink/" + filmed.foldername + "/" + filmed.subtitle;
+    subtitles.src = "/movies/" + filmed.foldername + "/" + filmed.subtitle;
     subtitles.src = subtitles.src.slice(0, -3) + "vtt";
     subtitles.default = true;
     movie.appendChild(subtitles);
@@ -94,7 +94,7 @@ function zoom_in() {
 function zoom_out() {
     //remove background color
     //document.body.style.background = "none";
-    document.body.style.backgroundImage = "url('/filmsLink/" + filmed.foldername+"/backdrop.jpg')"
+    document.body.style.backgroundImage = "url('/movies/" + filmed.foldername+"/backdrop.jpg')"
     movie.style.width = "1200px";
     movie.style.height = "600px";
     movie.style.transform = "translate(-325px, 0)";

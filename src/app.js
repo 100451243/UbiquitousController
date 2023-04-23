@@ -17,7 +17,7 @@ storage.init( /* options ... */ );
 
 const hostname = process.env.PHOSTNAME || "localhost";
 const port = process.env.PORT || 3000;
-const library_path = process.env.LIBRARY_PATH || "filmsLink";
+const library_path = process.env.LIBRARY_PATH || "/Data/multimedia/movies";
 
 const dhtml = "/display-html";
 
