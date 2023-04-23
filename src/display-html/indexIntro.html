@@ -26,21 +26,13 @@
 </div>
 
 
-<!--
+
 <script>
     window.getCookie = function(name) {
         let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
         if (match) return match[2];
     }
-
-    let user = document.getElementById("user");
-    //save cookie "id" in user.innerHTML
-    user.innerHTML += getCookie("id");
-
-    window.getCookie = function(name) {
-        let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-        if (match) return match[2];
-    }
+    console.log("User is: " + getCookie("id"));
     let films = [];
 
     function setRandomBackground(time) {
@@ -131,7 +123,6 @@
 
 
 </script>
--->
 
 <!--<script>-->
 <!--    setTimeout(function () { location.reload(); }, 1000);-->
