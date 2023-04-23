@@ -3,6 +3,8 @@ const {readFileSync} = require('fs');
 
 
 function createFilmList(given_path) {
+    given_path = require('path').join(fs.readlinkSync(require('path').join(__dirname, "movies"), (err, target) =>
+    {if (!err) console.log(target);}), "/");
     console.log("Path: " + given_path)
     let filmList = [];
     //get all folders in the path
