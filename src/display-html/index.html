@@ -43,6 +43,8 @@
                 console.log("[open] Connection established, Sending to server");
                 alert("Requesting films")
                 socket.send(JSON.stringify({"action":"requestFilms", "id":getCookie("id")}))
+                socket.send(JSON.stringify({"action":"infoResponse", "id":getCookie("id"), "context":"menu"}))
+
             };
             socket.onmessage = function(event) {
                 console.log(`[message] Data received from server: ${event.data}`);

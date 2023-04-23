@@ -18,15 +18,21 @@ socket.onopen = function() {
 socket.onmessage = function(event) {
     try {
         const data = JSON.parse(event.data);
+        console.log("received message from server: " + data);
         if (data.id !== getCookie("id")) {
             return;
         }
         switch (data.action) {
-            case "info":
+            case "infoResponseToPhone":
+                console.log("infoResponseToPhone: " + data.context)
                 context = data.context;
-                break;
-            case "watching":
-                display_cross(data.watching);
+                switch (context) {
+                    case "movie":
+                        display_cross(true);
+                        break;
+                    case "menu":
+                        display_cross(false);
+                }
                 break;
         }
     } catch (e) {
@@ -35,10 +41,12 @@ socket.onmessage = function(event) {
 };
 
 function send_movement(movement) {
+    console.log("Sending movement: " + movement)
     socket.send(JSON.stringify({"action":`${movement}`, "id":getCookie("id")}))
 }
 
 function send_knob(value) {
+    console.log("Sending knob: " + value)
     socket.send(JSON.stringify({"action":"knob", "id":getCookie("id"), "value":value}))
 }
 

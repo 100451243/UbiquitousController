@@ -31,6 +31,15 @@ function animate_hold(){
 function animate_info_circle_open(){
     let landscape = document.querySelector("#main-screen-landscape");
     let modal_info = document.querySelector("#modal-info-box");
+    let info_msg = document.querySelector(".modal-content");
+    if (context == "menu"){
+        info_msg.innerHTML = "Estás en el menú principal.";
+    } else if (context == "movie"){
+        info_msg.innerHTML = "Estás viendo la película.";
+    } else{
+        info_msg.innerHTML = "Esperando al servidor...";
+    }
+
     // Animate the change
     modal_info.style.animation = "infoModalOpen 0.5s ease";
     modal_info.style.display = "block";
@@ -44,16 +53,9 @@ function animate_info_circle_open(){
 function animate_info_circle_close(){
     let landscape = document.querySelector("#main-screen-landscape");
     let modal_info = document.querySelector("#modal-info-box");
-    let info_msg = document.querySelector(".modal-content");
     // Animate the change
     modal_info.style.animation = "infoModalClose 0.5s ease";
-    if (context == "menu"){
-        info_msg.innerHTML = "Estás en el menú principal.";
-    } else if (context == "movie"){
-        info_msg.innerHTML = "Estás viendo la película.";
-    } else{
-        info_msg.innerHTML = "Esperando al servidor...";
-    }
+
     setTimeout(() => {
         modal_info.style.animation = "";
         modal_info.style.display = "none";

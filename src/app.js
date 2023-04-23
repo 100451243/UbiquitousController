@@ -24,9 +24,6 @@ const hostname = process.argv[2];
 const port = process.argv[3];
 const library_path = process.argv[4];
 
-//const hostname = process.env.PHOSTNAME || "192.168.68.138";
-//const port = process.env.PORT || 3000;
-//const library_path = process.env.LIBRARY_PATH || "/Data/multimedia/movies";
 
 const dhtml = "/display-html";
 
@@ -140,84 +137,105 @@ const wss = new Server({server: server3});
 
 
 wss.on('connection', function connection(ws, req) {
-  console.log('Websockets Client connected:');
+  console.log('Websockets Client has connected:');
   let id;
 
   ws.on('message', function incoming(message) {
     console.log('Received message: %s', message);
     try {
       const data = JSON.parse(message);
-      if(data.action === "waitLogin") {  //this is waiting on the display
-        id = data.id;
-        ws.id = id;
-        //check if displays[id] exists
-        if (displays[id] == undefined) {
-          displays[id] = ws;
-          console.log("Added display with id %s", id)
-        }
-        if (storage.getItem(id) === "true") {
-          ws.send(JSON.stringify({action: "reload", id: id}));  //not sure bout this
-        }
-      }
-      if(data.action === "validated") {  //this is the login from the mobile
-        id = data.id;
-        ws.id = "phone" + id;
-        //check if phones[id] exists
-        if (phones[id] == undefined) {
-          phones[id] = ws;
-          console.log("Added phone with id %s", id)
-        }  //else check if corresponding display exists, if not maybe send disconnect
-        wss.clients.forEach(function each(client) {
-          if (client.id === id) {
-            client.send(JSON.stringify({action: "reload", id: id}));
+      switch (data.action) {
+        case "waitLogin": //this is waiting on the display
+          id = data.id;
+          ws.id = id;
+          //check if displays[id] exists
+          if (displays[id] == undefined) {
+            displays[id] = ws;
+            console.log("Added display with id %s", id)
           }
-        });
-      }
-      if(data.action === "requestFilms"){
-        id = data.id;
-        ws.id = id;
-        //check if displays[id] exists
-        if (displays[id] == undefined) {
-          displays[id] = ws;
-          console.log("Added display with id %s. ATTENTION THIS SHOULD NOT HAPPEN", id)
-        }
-        if (phones[id] == undefined) {
-          console.log("Phone with id %s not found. ATTENTION THIS SHOULD NOT HAPPEN", id)
+          if (storage.getItem(id) === "true") {
+            ws.send(JSON.stringify({action: "reload", id: id}));  //not sure bout this
+          }
+          break;
+        case "validated": //this is the login from the mobile
+          id = data.id;
+          ws.id = "phone" + id;
+          if (phones[id] == undefined) { //check if phones[id] exists
+            phones[id] = ws;
+            console.log("Added phone with id %s", id)
+          }  //else check if corresponding display exists, if not maybe send disconnect
+          wss.clients.forEach(function each(client) {
+            if (client.id === id) {
+              client.send(JSON.stringify({action: "reload", id: id}));
+            }
+          });
+          break;
+        case "requestFilms":
+          id = data.id;
+          ws.id = id;
+          //check if displays[id] exists
+          if (displays[id] == undefined) {
+            displays[id] = ws;
+            console.log("Added display with id %s. ATTENTION THIS SHOULD NOT HAPPEN", id);}
+          if (phones[id] == undefined) {
+            console.log("Phone with id %s not found. ATTENTION THIS SHOULD NOT HAPPEN", id)
+            storage.setItem(id, "false");
+            ws.send(JSON.stringify({action: "disconnect", id: data.id}));}
+          console.log("Will send films to logged in user")
+          ws.send(JSON.stringify({action: "films", films: createFilmList(library_path)}));
+          break;
+        case "requestFilmsBeforeLogin":
+          ws.send(JSON.stringify({action: "filmsInfo", films: createFilmList(library_path)}));
+          break;
+        case "info":
+          console.log("Phone requested info to server, server asks display for info")
+          wss.clients.forEach(function each(client) {
+            if (client.id === data.id) {
+              client.send(JSON.stringify({action: "infoRequestToDisplay", id: data.id}));
+            }
+          });
+          break;
+        case "infoResponse":
+          console.log("Display sent info to server, server sends info to phone")
+          wss.clients.forEach(function each(client) {
+            if (client.id === "phone" + data.id) {
+              client.send(JSON.stringify({action: "infoResponseToPhone", id: data.id, context: data.context}));
+            }
+          });
+          break;
+        case "close-video":
+          wss.clients.forEach(function each(client) {
+            if (client.id == data.id) {
+              client.send(JSON.stringify({action: "shake", id: data.id}));
+            }
+          });
+          break;
+        case "disconnect":
+          console.log("Disconnected successfully")  //this is never reached, neither from phone nor from display
           storage.setItem(id, "false");
-          ws.send(JSON.stringify({action: "disconnect", id: data.id}));
-        }
-        console.log("Will send films")
-        let films = createFilmList(library_path);
-        ws.send(JSON.stringify({action: "films", films: films}));
-      }
-      if(data.action === "requestFilmsBeforeLogin"){
-        let films = createFilmList(library_path);
-        ws.send(JSON.stringify({action: "filmsInfo", films: films}));
-      }
-      if(data.action === "info"){
-        console.log("Will send films")
-        //let films = createFilmList("filmsLink");
-        ws.send(JSON.stringify({action: "instructions", films: "Esto serían las instrucciones, funcionara?"}));
-      }
-      if(data.action === "disconnect"){
-        console.log("Disconnected successfully")  //this is never reached, neither from phone nor from display
-        storage.setItem(id, "false");
-        displays.data.id.send(JSON.stringify({action: "disconnect", id: data.id}));
-        delete phones[id];
-      }
-      if(data.action === "convert"){
-        console.log("Will convert subtitles")
-        let subs_path = path.join(__dirname, data.path);
-        let srt_data = fs.readFileSync(subs_path);
-        let newExtension = subs_path.slice(0, -3) + "vtt";
+          displays.data.id.send(JSON.stringify({action: "disconnect", id: data.id}));
+          delete phones[id];
+          break;
+        case "convert":
+          console.log("Will convert subtitles")
+          let subs_path = path.join(__dirname, data.path);
+          let srt_data = fs.readFileSync(subs_path);
+          let newExtension = subs_path.slice(0, -3) + "vtt";
 
-        let vtt;
-        try{        vtt = srt2webvtt(srt_data.toString());
-        }catch(err){    console.log("Error converting subtitles: %s", err); }
-        try{        fs.writeFileSync(newExtension, vtt);
-        }catch{         console.log("Error writing subtitles to file, could be there already")}
-        console.log("Subtitles converted")
-        ws.send(JSON.stringify({action: "subtitleReady"}));
+          let vtt;
+          try {
+            vtt = srt2webvtt(srt_data.toString());
+          } catch (err) {
+            console.log("Error converting subtitles: %s", err);
+          }
+          try {
+            fs.writeFileSync(newExtension, vtt);
+          } catch {
+            console.log("Error writing subtitles to file, could be there already")
+          }
+          console.log("Subtitles converted")
+          ws.send(JSON.stringify({action: "subtitleReady"}));
+          break;
       }
 
 
@@ -225,8 +243,8 @@ wss.on('connection', function connection(ws, req) {
       actions.forEach(function (item, index) {
         if (string.includes(item)) {
           if (displays[data.id] !== undefined) {
-            let sender = displays[data.id]
-            sender.send(JSON.stringify({action: item, id: data.id}));
+            let sendTo = displays[data.id]
+            sendTo.send(JSON.stringify({action: item, id: data.id}));
             console.log("Action detected: %s" + item + " Sent action " + item + " to display with id " + data.id)
           } else {  console.log("Display with id %s not found", data.id) }
           wss.clients.forEach(function each(client) {

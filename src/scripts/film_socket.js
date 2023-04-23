@@ -18,6 +18,7 @@ let socket = new WebSocket(location.origin.replace(/^http/, 'ws'));
 
 socket.onopen = function() {
     socket.send(JSON.stringify({"action":"requestFilms", "id":getCookie("id")}))
+    send_context("movie");
 }
 socket.onmessage = function(event) {
     try {
@@ -32,7 +33,7 @@ socket.onmessage = function(event) {
             case "subtitleReady":
                 fill_subtitles();
                 break;
-            case "info":
+            case "infoRequestToDisplay":
                 // Send the context into the server
                 send_context("movie");
                 break;
@@ -102,7 +103,7 @@ socket.onerror = function(error) {
 
 
 function send_context(context) {
-    socket.send(JSON.stringify({"action":"info", "id":getCookie("id"), "context":context}))
+    socket.send(JSON.stringify({"action":"infoResponse", "id":getCookie("id"), "context":context}))
 }
 
 function send_movie_query(id) {
