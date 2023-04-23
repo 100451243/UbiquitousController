@@ -120,8 +120,3 @@ function volume (vol) {
 function exit_film () {
     window.location.href = "../display-html/index.html"
 }
-
-function subtitles () {
-    let subs = document.getElementById("subs");
-    subs.src = "./The.Matrix.1999.1080p.BrRip.x264.YIFY.eng.srt"
-}
