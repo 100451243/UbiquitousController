@@ -27,7 +27,7 @@ phones = {}
 
 const generateQR = async text => {        //we will call this with different id for different users
   try {
-    await QRCode.toFile(__dirname +'/qrcode.png', text)
+    await QRCode.toFile(__dirname +'/media/qrcode.png', text)
   } catch (err) {console.error(err)}
 }
 
