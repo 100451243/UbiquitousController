@@ -15,16 +15,15 @@ const srt2webvtt = require('./scripts/srt2webvtt.js');
 const storage = require('node-persist');
 storage.init( /* options ... */ );
 
-if (process.argv.length < 5){
+if (process.argv.length !== 4){
   console.log("Usage: node app.js <ip address> <port> <path-to-movies>");
   process.exit(1);
 }
 
 const hostname = process.argv[2];
 const port = process.argv[3];
-const library_path = process.argv[4];
 
-
+const library_path = "movies";
 const dhtml = "/display-html";
 
 actions = ["zoom_out", "zoom_in", "left-swipe", "right-swipe", "up-swipe", "down-swipe", "tap", "double-tap", "knob", "portrait", "shake", "info"]
