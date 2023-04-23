@@ -14,8 +14,15 @@ const srt2webvtt = require('./scripts/srt2webvtt.js');
 
 const storage = require('node-persist');
 storage.init( /* options ... */ );
+if (process.argv.length < 2){
+  console.log("Usage: node app.js <ip address>");
+  process.exit(1);
+}
+else {
+  hostname = process.argv[2];
+}
 
-const hostname = process.env.PHOSTNAME || "localhost";
+//const hostname = process.env.PHOSTNAME || "localhost";
 const port = process.env.PORT || 3000;
 const library_path = process.env.LIBRARY_PATH || "/Data/multimedia/movies";
 

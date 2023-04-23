@@ -25,6 +25,9 @@ socket.onmessage = function(event) {
             case "info":
                 context = data.context;
                 break;
+            case "watching":
+                display_cross(data.watching);
+                break;
         }
     } catch (e) {
         console.log("Error when receiving message")

@@ -71,6 +71,18 @@ body{
     z-index: 1000;
 }
 
+#close-button{
+    display: none;
+    font-size: 50px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    color: #1e1e1e; 
+    top: 4vh;
+    right: 0;
+    z-index: 1000;
+}
+
+
 #squiggle{
     stroke-dasharray: 450;
     stroke-dashoffset: 450;

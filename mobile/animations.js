@@ -105,3 +105,13 @@ function animate_landscape_off(){
 function animate_shake(){
     window.navigator.vibrate([250, 250, 250, 250, 250]);
 }
+
+function display_cross(value){
+    close_button = document.querySelector("#close-button");
+    if (value) {
+        close_button.style.display = "block";
+    }
+    else {
+        close_button.style.display = "none";
+    }
+}

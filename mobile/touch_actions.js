@@ -1,11 +1,14 @@
 // File containing the logic for finger action detection
 var main_screen = document.querySelector("#main-screen");
+var cross = document.querySelector("#close-button");
 
 main_screen.addEventListener("touchstart", handle_touch_start, false);   
 main_screen.addEventListener("touchend", handle_touch_end, false);
 main_screen.addEventListener("touchmove", handle_touch_move, false);
 main_screen.addEventListener("click", tap, false);
 main_screen.addEventListener("dblclick", double_tap, false);
+
+cross.addEventListener("click", close_clicked, false);
 
 var info_circle = document.querySelector("#info-circle");
 var modal_info = document.querySelector("#button-ok");
@@ -226,3 +229,6 @@ function exit_info() {
     animate_info_circle_close();
 }
 
+function close_clicked() {
+    send_movement("close-video");
+}
