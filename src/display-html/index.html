@@ -103,11 +103,13 @@
                     if(data.action === "right-swipe"){
                         if (selected === undefined) {
                             selected = 0;
-                        } else if (selected < films.length - 1) {
+                        }else{
                             display.childNodes[selected].style.backgroundColor = "white";
                             display.childNodes[selected].style="animation: none; border-color: none; border-width: 0px;"
                             selected++;
                         }
+
+                        if(selected>display.childNodes.length-1){ selected=0; }
                         display.childNodes[selected].style.backgroundColor = "green";
                         //make element constant-tilt-shake class
                         display.childNodes[selected].style="animation: tilt-n-move-shaking 0.5s 0.2s; border-color: black; border-width: 10px;"
@@ -116,11 +118,13 @@
                     if(data.action === "left-swipe"){
                         if (selected === undefined) {
                             selected = 0;
-                        } else if (selected > 0) {
+                        }else {
                             display.childNodes[selected].style.backgroundColor = "white";
-                            display.childNodes[selected].style="animation: none; border-color: none; border-width: 0px;"
+                            display.childNodes[selected].style = "animation: none; border-color: none; border-width: 0px;"
                             selected--;
                         }
+
+                        if(selected<0){ selected=display.childNodes.length-1; }
                         display.childNodes[selected].style.backgroundColor = "red";//
                         display.childNodes[selected].style="animation: tilt-n-move-shaking 0.5s 0.2s; border-color: black; border-width: 10px;"
                         display.childNodes[selected].scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
@@ -134,6 +138,7 @@
                             display.childNodes[selected].style="animation: none; border-color: none; border-width: 0px;"
                             selected= selected - movement < 0 ? 0 : selected - movement;
                         }
+                        if(selected<0)    { selected=0; }
                         display.childNodes[selected].style.backgroundColor = "red";
                         display.childNodes[selected].style="animation: tilt-n-move-shaking 0.5s 0.2s; border-color: black; border-width: 10px;"
                         display.childNodes[selected].scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
@@ -146,6 +151,7 @@
                             display.childNodes[selected].style="animation: none; border-color: none; border-width: 0px;"
                             selected = selected + movement > films.length - 1 ? films.length - 1 : selected + movement;
                         }
+                        if(selected>display.childNodes.length-1)    { selected=display.childNodes.length; }
                         display.childNodes[selected].style.backgroundColor = "green";
                         display.childNodes[selected].style="animation: tilt-n-move-shaking 0.5s 0.2s; border-color: black; border-width: 10px;"
                         display.childNodes[selected].scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
