@@ -23,7 +23,7 @@ function display_movie_info(film) {
     sinopsis.innerHTML = film.metadata.plot;
     info.innerHTML = "Genre: " + film.metadata.genre + "<span>|</span>" + "Duration: " + film.metadata.runtime+"m" + "<span>|</span>" + "Year: " + film.metadata.year + "<span>|</span>"  + "Director: " + film.metadata.director;
     poster_image.src = "/movies/" + film.foldername + "/folder.jpg";
-    document.getElementById("banner").src="/movies/" + film.foldername + "/banner.jpg";
+    //document.getElementById("banner").src="/movies/" + film.foldername + "/banner.jpg";
     document.getElementById("logo").src="/movies/" + film.foldername + "/logo.png";
     setTimeout (function() {
         play_pause();

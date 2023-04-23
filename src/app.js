@@ -9,8 +9,8 @@ const cookieParser = require('cookie-parser');
 const app = express();
 app.use(cookieParser());
 
-const createFilmList = require('./film-discovery.js');
-const srt2webvtt = require('./scripts/srt2webvtt.js');
+const createFilmList = require('./modules/film-discovery.js');
+const srt2webvtt = require('./modules/srt2webvtt.js');
 
 const storage = require('node-persist');
 storage.init( /* options ... */ );
