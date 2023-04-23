@@ -1,0 +1,25 @@
+html, body {
+    height: 100%;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 95%;
+    border-radius: 50%;
+}
+
+.image-wrapper {
+    text-align: center;
+}
+
+#centeredBox{
+    border-radius: 35px;
+    box-shadow:
+            0 0 10px 10px #fff,  /* inner white */
+            0 0 600px 40px #f0f, /* middle magenta */
+            0 0 70px 100px #0ff; /* outer cyan */
+}
+
