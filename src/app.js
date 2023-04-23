@@ -10,6 +10,7 @@ const app = express();
 app.use(cookieParser());
 
 const createFilmList = require('./film-discovery.js');
+const srt2webvtt = require('./scripts/srt2webvtt.js');
 
 const storage = require('node-persist');
 storage.init( /* options ... */ );
@@ -20,7 +21,7 @@ const library_path = process.env.LIBRARY_PATH || "filmsLink";
 
 const dhtml = "/display-html";
 
-actions = ["zoom_out", "zoom_in", "left-swipe", "right-swipe", "up-swipe", "down-swipe", "tap", "double-tap", "info"]
+actions = ["zoom_out", "zoom_in", "left-swipe", "right-swipe", "up-swipe", "down-swipe", "tap", "double-tap", "knob", "portrait", "shake", "info"]
 displays = {}
 phones = {}
 
@@ -68,6 +69,10 @@ app.get('/login', async (req, res) => {
 })
 
 app.get('/film_info', async (req, res) => {
+  if(req.query.id !== req.cookies['id']) {
+    console.log("No id given on film page, redirecting to login page")
+    res.redirect('/');
+  }
   console.log("redirected to film_info page")
   return res.sendFile(path.join(__dirname, dhtml, 'film_info.html'));
 });
@@ -106,8 +111,6 @@ app.get('/communication.js', async (req, res) => {
   let path2 = path.join(__dirname, '..', 'mobile', 'communication.js');
   return res.sendFile(path2);
 })
-// the following code sends .css and .js files
-// the following code sends .css and .js files
 // the following code sends .css and .js files
 app.use(express.static(__dirname, {
   extensions: ['htm', 'png', 'jpg', 'jpeg', 'gif', 'css', 'js']
@@ -166,6 +169,7 @@ wss.on('connection', function connection(ws, req) {
           console.log("Added display with id %s. ATTENTION THIS SHOULD NOT HAPPEN", id)
         }
         if (phones[id] == undefined) {
+          console.log("Phone with id %s not found. ATTENTION THIS SHOULD NOT HAPPEN", id)
           storage.setItem(id, "false");
           ws.send(JSON.stringify({action: "disconnect", id: data.id}));
         }
@@ -188,6 +192,20 @@ wss.on('connection', function connection(ws, req) {
         displays.data.id.send(JSON.stringify({action: "disconnect", id: data.id}));
         delete phones[id];
       }
+      if(data.action === "convert"){
+        console.log("Will convert subtitles")
+        let subs_path = path.join(__dirname, data.path);
+        let srt_data = fs.readFileSync(subs_path);
+        let newExtension = subs_path.slice(0, -3) + "vtt";
+
+        let vtt;
+        try{        vtt = srt2webvtt(srt_data.toString());
+        }catch(err){    console.log("Error converting subtitles: %s", err); }
+        try{        fs.writeFileSync(newExtension, vtt);
+        }catch{         console.log("Error writing subtitles to file, could be there already")}
+        console.log("Subtitles converted")
+        ws.send(JSON.stringify({action: "subtitleReady"}));
+      }
 
 
       let string = data.action;
@@ -200,7 +218,10 @@ wss.on('connection', function connection(ws, req) {
           } else {  console.log("Display with id %s not found", data.id) }
           wss.clients.forEach(function each(client) {
             if (client.id == data.id) {
-              client.send(JSON.stringify({action: item, id: data.id}));
+              if(data.value === undefined){  //not-knob vs knob action
+                client.send(JSON.stringify({action: item, id: data.id}));
+                }else{client.send(JSON.stringify({action: item, id: data.id, value: data.value}));}
+
             }
           });
         }
@@ -215,19 +236,21 @@ wss.on('connection', function connection(ws, req) {
 
   ws.on('close', function close() {
     console.log('Client disconnected on close');
-    if (ws.id.includes("phone")) {
-      console.log("Phone with id %s disconnected", id)
-      delete phones[id];
-      storage.setItem(id, "false");
-      //console.log(id.split("phone-")[1])
-      wss.clients.forEach(function each(client) {
-        if (client.id == id) {
-          client.send(JSON.stringify({action: "disconnect", id: id}));
-          delete displays[id];
-          delete phones[id];
-        }
-      });
-    }
+    if(ws.id !== undefined) {
+      if (ws.id.includes("phone")) {
+        console.log("Phone with id %s disconnected", id)
+        delete phones[id];
+        storage.setItem(id, "false");
+        //console.log(id.split("phone-")[1])
+        wss.clients.forEach(function each(client) {
+          if (client.id == id) {
+            client.send(JSON.stringify({action: "disconnect", id: id}));
+            delete displays[id];
+            delete phones[id];
+          }
+        });
+      }
+    }else{console.log("Undefined id websocket has disconnected");}
   });
   ws.on('error', function close() {
     console.log('Client disconnected on error');

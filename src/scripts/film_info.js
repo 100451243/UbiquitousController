@@ -7,31 +7,57 @@ const info = document.getElementById("info");
 const poster_image = document.getElementById("poster_image");
 const movie = document.getElementById("movie");
 const like_button = document.getElementById("like-button");
+//const subs = document.getElementById("subs");
 
 // On load, get the movie info
 //window.onload = function() { display_movie_info("movie") };  //this is going to be executed only when the film is received on film_socket.js
 let first_tap = true;
+let filmed;
 
 function display_movie_info(film) {
-    background.style.background = "url(/filmsLink/" + film.foldername + "/landscape.jpg)";
-    background.style.backgroundSize = "cover"
-    sinopsis.innerHTML = film.metadata.plot;
+    filmed = film;
+    console.log(film)
     title.innerHTML = film.title;
     calculate_star_rating(film.metadata.rating);
-    info.innerHTML = "Genre: " + film.metadata.genre + "<span>|</span>" + "Year: " + film.metadata.year + "<span>|</span>"  + "Director: " + film.metadata.director;
+    document.getElementById("tagline").innerHTML = film.metadata.tagline;
+    sinopsis.innerHTML = film.metadata.plot;
+    info.innerHTML = "Genre: " + film.metadata.genre + "<span>|</span>" + "Duration: " + film.metadata.runtime+"m" + "<span>|</span>" + "Year: " + film.metadata.year + "<span>|</span>"  + "Director: " + film.metadata.director;
+    poster_image.src = "/filmsLink/" + film.foldername + "/folder.jpg";
+    document.getElementById("banner").src="/filmsLink/" + film.foldername + "/banner.jpg";
+    document.getElementById("logo").src="/filmsLink/" + film.foldername + "/logo.png";
     setTimeout (function() {
         play_pause();
     }, 1000);
-    movie.src = "/filmsLink/" + film.foldername + "/" + film.file;
-    
-    //to modify background:
-    //let backdrop = "url(/filmsLink/" + film.foldername + "/landscape.jpg)";
-    //background.style.background = backdrop;  no funciona, en indexintro tb tuve un problema parecido, si no lo consigues arreglar lo intento mañana
-    //background.style.background = "url(../filmsLink/"+ film.foldername + "/landscape.jpg)";
 
-    //to modify video element
-    // let video = "/filmsLink/" + film.foldername + "/" + film.file;
+    socket.send(JSON.stringify({"action":"convert","path":"/filmsLink/" + film.foldername + "/" + film.subtitle}));
+    console.log("sent request to convert subtitles");
+
+    movie.src = "/filmsLink/" + film.foldername + "/" + film.file;
+
+    document.body.style.backgroundImage = "url('/filmsLink/" + film.foldername+"/backdrop.jpg')"
+    document.body.style.backdropFilter = "blur(5px)";
+    document.body.style.backgroundRepeat = "no-repeat";
+    background.style.backgroundImage = "url(/filmsLink/" + film.foldername + "/landscape.jpg)";
+    background.style.backgroundSize = "cover"
     
+}
+
+
+function fill_subtitles(){
+    let subtitles = document.createElement("track");
+    subtitles.kind = "subtitles";
+    subtitles.label = "English";
+    subtitles.srclang = "en";
+    subtitles.src = "/filmsLink/" + filmed.foldername + "/" + filmed.subtitle;
+    subtitles.src = subtitles.src.slice(0, -3) + "vtt";
+    subtitles.default = true;
+    movie.appendChild(subtitles);
+}
+
+let subs_on = true;
+function toggle_subs(){
+    subs_on = !subs_on;
+    document.getElementById("movie").textTracks[0].mode= subs_on ? "showing" : "disabled";
 }
 
 function calculate_star_rating(rating) {
@@ -60,24 +86,33 @@ function zoom_in() {
     movie.style.position = "fixed";
     movie.style.transform = "translate(0, 0)";
     movie.style.zIndex = "1000";
+    document.body.style.background = "black";
+    document.getElementById("banner").style.visibility = "hidden";
+    document.getElementById("logo").style.visibility = "hidden";
 }
 
 function zoom_out() {
-    movie.style.width = "500px";
-    movie.style.height = "300px";
-    movie.style.transform = "translate(-175px, 0)";
+    //remove background color
+    //document.body.style.background = "none";
+    document.body.style.backgroundImage = "url('/filmsLink/" + filmed.foldername+"/backdrop.jpg')"
+    movie.style.width = "1200px";
+    movie.style.height = "600px";
+    movie.style.transform = "translate(-325px, 0)";
     movie.style.borderRadius = "0.5em";
     movie.style.top = video_y;
     movie.style.left = video_x;
     movie.style.position = "relative";
+    document.exitFullscreen().then(r => console.log("fullscreen")).catch(e => console.log("error: " + e));
+    document.getElementById("banner").style.visibility = "visible";
+    document.getElementById("logo").style.visibility = "visible";
 }
 
-function fast_forward () {
-    movie.currentTime += 10;
+function fast_forward (amount) {
+    movie.currentTime += amount;
 }
 
-function rewind () {
-    movie.currentTime -= 10;
+function rewind (amount) {
+    movie.currentTime -= amount;
 }
 
 function restart () {
@@ -87,13 +122,13 @@ function restart () {
 function play_pause () {
     if (first_tap) {
         first_tap = false;
-        poster_image.style.animation = "posterAnimation 0.4s ease-out forwards"
+        poster_image.style.animation = "posterAnimation 1.6s ease-out forwards"
         setTimeout(function(){ 
             movie.style.display = "block";
-            movie.style.animation = "videoAnimation 0.3s ease-out forwards"
+            movie.style.animation = "videoAnimation 1.4s ease-out forwards"
             poster_image.style.display = "none";
             
-        }, 300);
+        }, 1000);
     }
 
     if (movie.paused){
@@ -114,9 +149,10 @@ like_dislike = function() {
 }
 
 function volume (vol) {
-    movie.volume = vol / 100;
+    let float = vol / 100;
+    movie.volume = float;
 }
 
 function exit_film () {
-    window.location.href = "../display-html/index.html"
+    window.location.href = "/"
 }

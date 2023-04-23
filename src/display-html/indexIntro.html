@@ -58,7 +58,6 @@
             //     opacity -= 0.1;
             //     document.getElementById("CurrentBackgroundImage").style.opacity = opacity;
             // }, 50);
-            //
             document.getElementById("CurrentBackgroundImage").remove();
         }
 
@@ -75,7 +74,6 @@
         image.style.opacity = "0";
         image.style.filter = "blur(2px)";
         document.body.appendChild(image);   //set background image
-        //animate fadein new image
         let opacity = 0;
         let interval = setInterval(function() {
             if (opacity >= 0.8) {
@@ -132,8 +130,6 @@
 
 
 </script>
-<!--<script>-->
-<!--    setTimeout(function () { location.reload(); }, 1000);-->
-<!--</script>-->
+
 </body>
 </html>

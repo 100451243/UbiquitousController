@@ -31,24 +31,24 @@ h2{
 }
 
 #poster {
-    width: 275px;
+    width: 475px;
     display: grid;
     grid-template-columns: 1fr;
 }
 
 #movie {
-    width: 500px;
+    width: 1200px;                       /*500 */
     display: none;
-    height: 300px;
+    height: 600px;                      /*300 */
     grid-row: 1;
     grid-column: 1;
-    transform: translate(-175px, 0);
+    transform: translate(-325px, 0);    /*-175 */
     border-radius: 0.5em;
     box-shadow: 0px 0px 76px 0px rgba(0, 0, 0, 0.47);
 }
 
 #poster_image {
-    width: 275px;
+    width: 475px;
     border-radius: 0.5em;
     background-color: #0e0e0e;
     grid-row: 1;
@@ -62,6 +62,7 @@ h2{
     max-width: 500px;
     margin-left: 100px;
     background-color: #0e0e0e;
+    transform: translate(350px, 0);
     padding: 2em;
     border-radius: 0.7em;
 }
@@ -103,6 +104,12 @@ h2{
     color: #48494d;
 }
 
+#tagline{
+    color: #FFFFFF;
+    font-size: 1.25em;
+    margin-top: 0.5em;
+}
+
 #sinopsis {
     color: #bbbebf;
     margin-top: 1em;
@@ -122,17 +129,17 @@ h2{
 
 @keyframes posterAnimation {
     0% {
-        width: 275px;
-        height: 400px;
+        width: 475px;
+        height: 675px;/* */
     }
     50% {
         opacity: 0.7;
     }
     100% {
         opacity: 0;
-        width: 500px;
+        width: 1000px;
         transform: translate(-175px, 0);
-        height: 300px;
+        height: 600px;
     }
 }
 
@@ -155,4 +162,28 @@ h2{
     100% {
         transform: scale(1);
     }
+}
+
+#banner{
+    width: 600px;
+    height: 111px;
+    background-color: #0e0e0e;
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translate(0px, 430px);
+}
+
+#logo{
+    width: 800px;
+    height: 310px;
+    background-color: transparent;
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translate(0px, -430px);
 }

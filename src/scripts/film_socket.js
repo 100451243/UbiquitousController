@@ -17,9 +17,7 @@ function fulfill_film_info() {
 let socket = new WebSocket(location.origin.replace(/^http/, 'ws'));
 
 socket.onopen = function() {
-    alert(getCookie("id"));
-    socket.send(JSON.stringify({"action":"validated", "id":getCookie("id")}))
-    socket.send(JSON.stringify({"action":"requestFilmsBeforeLogin", "id":getCookie("id")}))
+    socket.send(JSON.stringify({"action":"requestFilms", "id":getCookie("id")}))
 }
 socket.onmessage = function(event) {
     try {
@@ -27,33 +25,39 @@ socket.onmessage = function(event) {
         // if (data.id !== getCookie("id")) {
         //     return;
         // }
-        switch (data.action) {
+        console.log("received message: " + data);
+        console.log(JSON.stringify(data))
+        let action_done = data.action;
+        switch (action_done) {
+            case "subtitleReady":
+                fill_subtitles();
+                break;
             case "info":
                 // Send the context into the server
                 send_context("movie");
                 break;
-            case "filmsInfo":
+            case "films":
                 // All data from the movie from the movie
                 films = data.films;
                 fulfill_film_info();
                 break;
-            case "zoom-in":
+            case "zoom_in":
                 zoom_in();
                 break;
-            case "zoom-out":
+            case "zoom_out":
                 zoom_out();
                 break;
             case "left-swipe":
-                rewind();
+                rewind(10);
                 break;
             case "right-swipe":
-                fast_forward();
+                fast_forward(10);
                 break;
             case "up-swipe":
-                // Swipe up
+                rewind(600);
                 break;
             case "down-swipe":
-                // Swipe down
+                fast_forward(600);
                 break;
             case "tap":
                 play_pause();
@@ -68,16 +72,34 @@ socket.onmessage = function(event) {
                 exit_film();
                 break;
             case "landscape":
-                // Landscape
                 break;
             case "portrait":
-                // Portrait
+                toggle_subs();
                 break;
+            case "disconnect":
+                document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.location.reload();
         }
     } catch (e) {
         console.log("Error when receiving message")
+        console.log(e)
     }
 };
+
+socket.onclose = function(event) {
+    if (event.wasClean) {
+        alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+    } else {
+        alert('[close] Connection died');
+    }
+    document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.location.reload();
+};
+socket.onerror = function(error) {
+    alert(`[error]` + error.message);
+};
+
+
 
 function send_context(context) {
     socket.send(JSON.stringify({"action":"info", "id":getCookie("id"), "context":context}))
