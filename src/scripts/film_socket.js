@@ -89,7 +89,7 @@ socket.onmessage = function(event) {
 
 socket.onclose = function(event) {
     if (event.wasClean) {
-        alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+        //alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
     } else {
         alert('[close] Connection died');
     }
