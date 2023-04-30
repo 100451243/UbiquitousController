@@ -34,6 +34,7 @@ socket.onmessage = function(event) {
                 card.className = "card";
                 let img = document.createElement("img");
                 img.className = "card-img-top";
+                img.setAttribute('loading', 'lazy');
                 img.src = "movies/" + film.foldername + "/folder.jpg";
                 //check if img is loaded or is missing
                 img.onerror = function() {
