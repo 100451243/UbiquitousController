@@ -87,7 +87,7 @@ function zoom_in() {
     movie.style.transform = "translate(0, 0)";
     movie.style.zIndex = "1000";
     document.body.style.background = "black";
-    document.getElementById("banner").style.visibility = "hidden";
+    //document.getElementById("banner").style.visibility = "hidden";
     document.getElementById("logo").style.visibility = "hidden";
 }
 
@@ -103,7 +103,7 @@ function zoom_out() {
     movie.style.left = video_x;
     movie.style.position = "relative";
     document.exitFullscreen().then(r => console.log("fullscreen")).catch(e => console.log("error: " + e));
-    document.getElementById("banner").style.visibility = "visible";
+    //document.getElementById("banner").style.visibility = "visible";
     document.getElementById("logo").style.visibility = "visible";
 }
 

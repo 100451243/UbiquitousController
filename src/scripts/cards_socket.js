@@ -76,7 +76,6 @@ socket.onmessage = function(event) {
             }
 
             if(selected>display.childNodes.length-1){ selected=0; }
-            display.childNodes[selected].style.backgroundColor = "green";
             //make element constant-tilt-shake class
             display.childNodes[selected].style="animation: tilt-n-move-shaking 0.5s 0.2s; border-color: black; border-width: 10px;"
             display.childNodes[selected].scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
@@ -91,11 +90,10 @@ socket.onmessage = function(event) {
             }
 
             if(selected<0){ selected=display.childNodes.length-1; }
-            display.childNodes[selected].style.backgroundColor = "red";//
             display.childNodes[selected].style="animation: tilt-n-move-shaking 0.5s 0.2s; border-color: black; border-width: 10px;"
             display.childNodes[selected].scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
         }
-        let movement = Math.ceil(window.innerWidth / 300)-1;
+        let movement = Math.ceil(window.innerWidth / 308)-1;
         if(data.action === "up-swipe"){
             if (selected === undefined) {
                 selected = 0;
@@ -105,7 +103,6 @@ socket.onmessage = function(event) {
                 selected= selected - movement < 0 ? 0 : selected - movement;
             }
             if(selected<0)    { selected=0; }
-            display.childNodes[selected].style.backgroundColor = "red";
             display.childNodes[selected].style="animation: tilt-n-move-shaking 0.5s 0.2s; border-color: black; border-width: 10px;"
             display.childNodes[selected].scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
         }
@@ -117,45 +114,16 @@ socket.onmessage = function(event) {
                 display.childNodes[selected].style="animation: none; border-color: none; border-width: 0px;"
                 selected = selected + movement > films.length - 1 ? films.length - 1 : selected + movement;
             }
-            if(selected>display.childNodes.length-1)    { selected=display.childNodes.length; }
-            display.childNodes[selected].style.backgroundColor = "green";
+            if(selected>display.childNodes.length-1)    { selected=display.childNodes.length-1; }
             display.childNodes[selected].style="animation: tilt-n-move-shaking 0.5s 0.2s; border-color: black; border-width: 10px;"
             display.childNodes[selected].scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
         }
         if(data.action === "tap"){
             if (selected === undefined) {
                 console.log("Nothing selected");
-            }else if(0>5){
-                console.log("begin playing")
-                let title_image = document.createElement("img");
-                title_image.src = "movies/" + films[selected].foldername + "/clearart.png";
-                //set image, so it hovers over the top right corner of the video
-                title_image.style = "position: absolute; top: 0; right: 0; width: 20%; height: 20%; object-fit: cover;";
-
-                let logo_image = document.createElement("img");
-                logo_image.src = "movies/" + films[selected].foldername + "/logo.png";
-                //set image, so it hovers over the top left corner of the video
-                logo_image.style = "position: absolute; top: 0; left: 0; width: 20%; height: 20%; object-fit: cover;";
-
-                let video = document.createElement("video");
-                //video.playsInline = true;
-                video.src = "movies/" + films[selected].foldername + "/" + films[selected].file;
-                video.controls = true;
-                //video.autoplay = true;
-                video.play();
-                let container = document.createElement("div");
-                container.appendChild(logo_image);
-                container.appendChild(title_image);
-                container.appendChild(video);
-                let plot = document.createElement("p");
-                plot.innerHTML = films[selected].metadata.plot;
-                container.appendChild(plot);
-                document.body.innerHTML = container.outerHTML;
-            }
-            else{
+            }else{
                 document.location.href = "film_info?film=" + selected + "&id=" + getCookie("id");
             }
-
         }
         if(data.action === "disconnect"){
             document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";

@@ -37,7 +37,7 @@ const generateQR = async text => {        //we will call this with different id 
 }
 
 
-const server3 = app.listen(port, hostname, () => {
+const server3 = app.listen(port, () => {
     console.log('Server running at http://' + hostname + ':' + port + '/');
 });
 app.get('/', async (req, res) => {
