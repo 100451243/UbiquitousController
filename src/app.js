@@ -15,14 +15,14 @@ const srt2webvtt = require('./modules/srt2webvtt.js');
 const storage = require('node-persist');
 storage.init( /* options ... */ );
 
-if (process.argv.length !== 3){
-  console.log("Usage: node app.js <port>");
+if (process.argv.length !== 4){
+  console.log("Usage: node app.js <port> <path-to-movies>");
   process.exit(1);
 }
 
 const port = process.argv[2];
+const library_path = process.argv[3];
 
-const library_path = "movies";
 const dhtml = "/display-html";
 
 actions = ["zoom_out", "zoom_in", "left-swipe", "right-swipe", "up-swipe", "down-swipe", "tap", "double-tap", "knob", "portrait", "shake", "info"]
@@ -86,6 +86,8 @@ app.get('/film_info', async (req, res) => {
   console.log("redirected to film_info page")
   return res.sendFile(path.join(__dirname, dhtml, 'film_info.html'));
 });
+
+app.use('/movies', express.static(library_path));
 
 app.get('/touch_actions.js', async (req, res) => {
   let path2 = path.join(__dirname, '..', 'mobile', 'touch_actions.js');
