@@ -15,13 +15,12 @@ const srt2webvtt = require('./modules/srt2webvtt.js');
 const storage = require('node-persist');
 storage.init( /* options ... */ );
 
-if (process.argv.length !== 4){
-  console.log("Usage: node app.js <ip address> <port> <path-to-movies>");
+if (process.argv.length !== 3){
+  console.log("Usage: node app.js <port>");
   process.exit(1);
 }
 
-const hostname = process.argv[2];
-const port = process.argv[3];
+const port = process.argv[2];
 
 const library_path = "movies";
 const dhtml = "/display-html";
@@ -38,21 +37,23 @@ const generateQR = async text => {        //we will call this with different id 
 
 
 const server3 = app.listen(port, () => {
-    console.log('Server running at http://' + hostname + ':' + port + '/');
+    console.log('Server running at local port: ' + port + '/');
 });
 app.get('/', async (req, res) => {
   let id = req.cookies['id'];
+  // Get the host and port from the request object
+  const [hostname, port] = req.get('host').split(':');
   if (id === undefined) {
     console.log(id);
     //users[id = uuid().slice(0, 8)] = "false";
     storage.setItem(id = uuid().slice(0, 8), 'false')
     console.log('First visit of user, given id is: ' + id)
     res.cookie('id', id);
-    await generateQR("http://" + hostname + ':' + port + '/login?id=' + id + '&mobile=true')
+    await generateQR(req.protocol + "://" + hostname + (port ? ':' + port : '') + '/login?id=' + id + '&mobile=true')
     return res.sendFile(__dirname + dhtml + '/indexIntro.html');
   } else if (await storage.getItem(id) === "false") {
     console.log("User has yet to login with id %s", id)
-    await generateQR("http://" + hostname + ':' + port+ '/login?id=' + id + '&mobile=true')
+    await generateQR(req.protocol + "://" + hostname + (port ? ':' + port : '') + '/login?id=' + id + '&mobile=true')
     return res.sendFile(__dirname + dhtml + '/indexIntro.html');
   } else if (await storage.getItem(id) === "true") {
     console.log('User is logged in with id %s, redirecting to film contents', id)
