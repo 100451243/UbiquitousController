@@ -139,10 +139,10 @@ socket.onclose = function(event) {
     } else {
         // e.g. server process killed or network down
         // event.code is usually 1006 in this case
-        alert('[close] Connection died');
+        alert('[close] Connection died badly ');
     }
-    document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.location.reload();
+    //document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    //document.location.reload();
 };
 socket.onerror = function(error) {
     alert(`[error]` + error.message);

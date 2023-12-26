@@ -91,10 +91,10 @@ socket.onclose = function(event) {
     if (event.wasClean) {
         //alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
     } else {
-        alert('[close] Connection died');
+        alert('[close] Connection died badly');
     }
-    document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.location.reload();
+    //document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    //document.location.reload();
 };
 socket.onerror = function(error) {
     alert(`[error]` + error.message);
