@@ -33,9 +33,16 @@ function animate_info_circle_open(){
     let modal_info = document.querySelector("#modal-info-box");
     let info_msg = document.querySelector(".modal-content");
     if (context == "menu"){
-        info_msg.innerHTML = "- Swipe your finger to any direction to navigate <br> - Tap to select a movie";
+        info_msg.innerHTML = "- 👉 Swipe your finger to any direction to navigate <br>\n" +
+            "- 👆 Tap to select a movie";
     } else if (context == "movie"){
-        info_msg.innerHTML = "- Hold the screen to open the volume knob <br> - Swipe left or right to increment time by a little, slide up and down for greater increments <br> - Pinch to zoom in/out <br> - Tap to play/pause <br> - Double tap to like/dislike <br> - Turn your phone sidways and back to portrait mode to activate subtitles <br> - Tap the cross or shake the phone to exit";
+        info_msg.innerHTML = "- 🔊 Hold the screen to open the volume knob 🎚️<br>\n" +
+            "- 👈👉 Swipe left or right to seek 10 seconds, slide up and down for greater increments 🎞️<br>\n" +
+            "- 🤏 Pinch to zoom in/out 🔍 <br>\n" +
+            "- 👆 Tap to play/pause ▶️⏸️<br>\n" +
+            "- 👆👆 Double tap to like/dislike 💖💔 <br>\n" +
+            "- 🔄 Turn your phone sideways and back to portrait mode to activate subtitles <br>\n" +
+            "- ✖ Tap the cross or shake the phone to exit 🚪";
     } else{
         info_msg.innerHTML = "Waiting for the server...";
     }
