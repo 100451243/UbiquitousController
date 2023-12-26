@@ -203,7 +203,7 @@ function hold_down() {
     if (hold_switch){
         hold_switch = false;
         delete_knob();
-    } else {
+    } else if(context!=="menu"){
         hold_switch = true;
         create_knob();
         audio_knob.addListener(function(knob, value) {
@@ -230,5 +230,16 @@ function exit_info() {
 }
 
 function close_clicked() {
+    if(showing_info){
+        showing_info = false;
+        animate_info_circle_close();
+        return;
+    }
+    else if (showing_knob){
+        hold_switch = false;
+        showing_knob = false;
+        delete_knob();
+        return;
+    }
     send_movement("close-video");
 }
