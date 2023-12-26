@@ -29,7 +29,7 @@ function display_movie_info(film) {
         play_pause();
     }, 1000);
 
-    socket.send(JSON.stringify({"action":"convert","path":"/movies/" + film.foldername + "/" + film.subtitle}));
+    socket.send(JSON.stringify({"action":"convert","path":film.foldername + "/" + film.subtitle}));
     console.log("sent request to convert subtitles");
 
     movie.src = "/movies/" + film.foldername + "/" + film.file;

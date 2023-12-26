@@ -220,7 +220,7 @@ wss.on('connection', function connection(ws, req) {
           break;
         case "convert":
           console.log("Will convert subtitles")
-          let subs_path = path.join(__dirname, data.path);
+          let subs_path = path.join(library_path, data.path);
           let srt_data = fs.readFileSync(subs_path);
           let newExtension = subs_path.slice(0, -3) + "vtt";
 
@@ -299,21 +299,4 @@ const pingInterval = setInterval(() => {
     }
   });
 }, 30000);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

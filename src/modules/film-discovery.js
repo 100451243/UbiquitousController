@@ -24,9 +24,6 @@ function compareFilms(film1, film2) {
 
 
 function createFilmList(given_path) {
-    //given_path = require('path').join(fs.readlinkSync(require('path').join(__dirname, '..', "movies"), (err, target) =>
-    //{if (!err) console.log(target);}), "/");
-    console.log("Path: " + given_path)
     let filmList = [];
     //get all folders in the path
     let folders = fs.readdirSync(given_path);
@@ -88,10 +85,5 @@ function createFilmList(given_path) {
     filmList.sort(compareFilms);
     return filmList;
 }
-
-
-//filmListasdf = createFilmList(path)
-
-//console.log(filmListasdf)
 
 module.exports = createFilmList;

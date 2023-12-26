@@ -42,6 +42,15 @@ socket.onmessage = function(event) {
     }
 };
 
+socket.onclose = function(event) {
+    if (event.wasClean) {
+        //alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+    } else {
+        alert('Connection with the server has been lost, you must scan a new code');
+    }
+    document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+};
+
 function send_movement(movement) {
     console.log("Sending movement: " + movement)
     socket.send(JSON.stringify({"action":`${movement}`, "id":getCookie("id")}))
