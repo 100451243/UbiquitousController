@@ -75,7 +75,7 @@ app.get('/login', async (req, res) => {
   await storage.setItem(id, 'true')
   console.log('Login page accesed with id %s', id)
   res.cookie('id', id)
-  return res.sendFile(path.join(__dirname, '..', 'mobile', 'mobile.html'));
+  return res.sendFile(path.join(__dirname, 'mobile', 'mobile.html'));
 })
 
 app.get('/film_info', async (req, res) => {
@@ -90,37 +90,32 @@ app.get('/film_info', async (req, res) => {
 app.use('/movies', express.static(library_path));
 
 app.get('/touch_actions.js', async (req, res) => {
-  let path2 = path.join(__dirname, '..', 'mobile', 'touch_actions.js');
+  let path2 = path.join(__dirname, 'mobile', 'touch_actions.js');
   return res.sendFile(path2);
 })
 
 app.get('/animations.js', async (req, res) => {
-  let path2 = path.join(__dirname, '..', 'mobile', 'animations.js');
-  return res.sendFile(path2);
-})
-
-app.get('/communication.js', async (req, res) => {
-  let path2 = path.join(__dirname, '..', 'mobile', 'communication.js');
+  let path2 = path.join(__dirname, 'mobile', 'animations.js');
   return res.sendFile(path2);
 })
 
 app.get('/mobile.css', async (req, res) => {
-  let path2 = path.join(__dirname, '..', 'mobile', 'mobile.css');
+  let path2 = path.join(__dirname, 'mobile', 'mobile.css');
   return res.sendFile(path2);
 })
 
 app.get('/pureknob.js', async (req, res) => {
-  let path2 = path.join(__dirname, '..', 'mobile', 'pureknob.js');
+  let path2 = path.join(__dirname, 'mobile', 'pureknob.js');
   return res.sendFile(path2);
 })
 
 app.get('/movement_actions.js', async (req, res) => {
-  let path2 = path.join(__dirname, '..', 'mobile', 'movement_actions.js');
+  let path2 = path.join(__dirname, 'mobile', 'movement_actions.js');
   return res.sendFile(path2);
 })
 
 app.get('/communication.js', async (req, res) => {
-  let path2 = path.join(__dirname, '..', 'mobile', 'communication.js');
+  let path2 = path.join(__dirname, 'mobile', 'communication.js');
   return res.sendFile(path2);
 })
 // the following code sends .css and .js files
