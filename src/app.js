@@ -277,21 +277,22 @@ wss.on('connection', function connection(ws, req) {
 
   ws.on('close', function close() {
     clearInterval(pingInterval);
-    console.log('Client disconnected on close');
+    console.log('Client %s disconnected on close', ws.id);
     if(ws.id !== undefined) {
       if (ws.id.includes("phone")) {
-        console.log("Phone with id %s disconnected", id)
-        delete phones[id];
-        storage.setItem(id, "false");
-        //console.log(id.split("phone-")[1])
-        wss.clients.forEach(function each(client) {
-          if (client.id == id) {
-            client.send(JSON.stringify({action: "disconnect", id: id}));
-            delete displays[id];
-            delete phones[id];
-          }
-        });
-      }
+        if(id!==undefined) { //fix server crash when phone disconnects without id
+          console.log("Phone with id %s disconnected", id)
+          delete phones[id];
+          storage.setItem(id, "false");
+          //console.log(id.split("phone-")[1])
+          wss.clients.forEach(function each(client) {
+            if (client.id == id) {
+              client.send(JSON.stringify({action: "disconnect", id: id}));
+              delete displays[id];
+            }
+          });
+        }
+      } else { console.log("Display with id %s disconnected", ws.id) }
     }else{console.log("Undefined id websocket has disconnected");}
   });
   ws.on('error', function close() {
