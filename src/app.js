@@ -233,27 +233,40 @@ wss.on('connection', function connection(ws, req) {
           console.log("Subtitles converted")
           ws.send(JSON.stringify({action: "subtitleReady"}));
           break;
-      }
-
-
-      let string = data.action;
-      actions.forEach(function (item, index) {
-        if (string.includes(item)) {
-          if (displays[data.id] !== undefined) {
-            let sendTo = displays[data.id]
-            sendTo.send(JSON.stringify({action: item, id: data.id}));
-            console.log("Action detected: %s" + item + " Sent action " + item + " to display with id " + data.id)
-          } else {  console.log("Display with id %s not found", data.id) }
+        case "filter":
           wss.clients.forEach(function each(client) {
-            if (client.id == data.id) {
-              if(data.value === undefined){  //not-knob vs knob action
-                client.send(JSON.stringify({action: item, id: data.id}));
-                }else{client.send(JSON.stringify({action: item, id: data.id, value: data.value}));}
+              if (client.id == data.id) {
+              client.send(JSON.stringify({action: "filter", id: data.id, filter: data.filter}));
+              }
+          });
+          break;
+        case "noResultsFilter":
+          wss.clients.forEach(function each(client) {
+              if (client.id === "phone" + data.id) {
+              client.send(JSON.stringify({action: "noResultsFilter", id: data.id, filter: data.filter}));
+              }
+          });
+          break;
+        default:
+          let string = data.action;
+          actions.forEach(function (item, index) {
+            if (string.includes(item)) {
+              if (displays[data.id] !== undefined) {
+                let sendTo = displays[data.id]
+                sendTo.send(JSON.stringify({action: item, id: data.id}));
+                //console.log("Move detected: %s" + item + " Sent action " + item + " to display with id " + data.id)
+              } else {  console.log("Display with id %s not found", data.id) }
+              wss.clients.forEach(function each(client) {
+                if (client.id == data.id) {
+                  if(data.value === undefined){  //not-knob vs knob action
+                    client.send(JSON.stringify({action: item, id: data.id}));
+                  }else{client.send(JSON.stringify({action: item, id: data.id, value: data.value}));}
 
+                }
+              });
             }
           });
-        }
-      });
+      }
 
 
     }

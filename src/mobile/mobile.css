@@ -71,6 +71,41 @@ body{
     z-index: 1000;
 }
 
+#microphone{
+    font-size: 50px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    color: #1e1e1e;
+    top: 4vh;
+    right: 0;
+    z-index: 1000;
+}
+
+#spinner{
+    display: none;
+    font-size: 50px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    color: #1e1e1e;
+    top: 4vh;
+    right: 0;
+    z-index: 1000;
+    transform-origin: center;
+    animation-name: spin;
+    animation-duration: 5000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+
 #close-button{
     display: none;
     font-size: 50px;

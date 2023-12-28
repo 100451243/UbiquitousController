@@ -56,3 +56,7 @@ img {
 .card-title{
     font-family: Impact;
 }
+
+.sort_title{
+    display: none;
+}

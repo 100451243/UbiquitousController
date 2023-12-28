@@ -33,8 +33,13 @@ function animate_info_circle_open(){
     let modal_info = document.querySelector("#modal-info-box");
     let info_msg = document.querySelector(".modal-content");
     if (context == "menu"){
-        info_msg.innerHTML = "- 👉 Swipe your finger to any direction to navigate <br>\n" +
-            "- 👆 Tap to select a movie";
+        if(filterResultBlank){
+            info_msg.innerHTML= "🚫 No movies 🎬 have been found for your 🗣️ voice search. Please press the ❌ cross icon and try again."
+        }else{
+            info_msg.innerHTML = "- 👉 Swipe your finger to any direction to move the cursor ➡️ ⬅️ ⬇️ ⬆️ <br>\n" +
+                "- 👆 Tap the microphone 🎤 to️ voice search 🗣️ for a movie 🎬 <br>\n" +
+                "- 👆 Tap in the blank space to select a movie 🎬";
+        }
     } else if (context == "movie"){
         info_msg.innerHTML = "- 🔊 Hold the screen to open the volume knob 🎚️<br>\n" +
             "- 👈👉 Swipe left or right to seek 10 seconds, slide up and down for greater increments 🎞️<br>\n" +
@@ -122,5 +127,20 @@ function display_cross(value){
     }
     else {
         close_button.style.display = "none";
+        showing_knob = false;
     }
+}
+
+function display_microphone(value){
+    let microphone = document.querySelector("#microphone");
+    if (value) {
+        microphone.style.display = "block";
+    }
+    else {
+        microphone.style.display = "none";
+    }
+}
+
+function disable_filter(){
+    microFilterActive = false;
 }

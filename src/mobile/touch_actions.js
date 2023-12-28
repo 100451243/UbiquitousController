@@ -12,10 +12,13 @@ cross.addEventListener("click", close_clicked, false);
 
 var info_circle = document.querySelector("#info-circle");
 var modal_info = document.querySelector("#button-ok");
+var micro = document.querySelector("#microphone")
 info_circle.addEventListener("click", click_info, false);
 modal_info.addEventListener("click", exit_info, false);
+micro.addEventListener("click", handleSpeechClick,false);
 var showing_info = false;
 var showing_knob = false;
+var microFilterActive = false;
 
 const carmine = "#ee6b6e";
 const yellow = "#e0d162";
@@ -232,14 +235,74 @@ function exit_info() {
 function close_clicked() {
     if(showing_info){
         showing_info = false;
+        if(filterResultBlank){
+            filterResultBlank = false;
+        }
         animate_info_circle_close();
         return;
     }
     else if (showing_knob){
         hold_switch = false;
-        showing_knob = false;
         delete_knob();
+        return;
+    }
+    else if(microFilterActive){
+        microFilterActive = false;
+        send_filter("undoFilter")
+        display_cross(false);
+        if(filterResultBlank===true){
+            filterResultBlank = false;
+            animate_info_circle_close();
+        }
+        document.querySelector("#microphone").style.display = "block";
         return;
     }
     send_movement("close-video");
 }
+
+const GetSpeech = () => {
+    console.log("clicked microphone");
+    const SpeechRecognition =  window.speechRecognition || window.webkitSpeechRecognition;
+    let resultObtained=false;
+
+    let recognition = new SpeechRecognition();recognition.onstart = () => {
+        console.log("starting listening, speak in microphone");
+        display_microphone(false);
+        document.querySelector("#spinner").style.display = "block";
+    }
+    recognition.onspeechend = () => {
+        console.log("stopped listening");
+        document.querySelector("#spinner").style.display = "none";
+        display_cross(true);
+        recognition.stop();
+    }
+    recognition.onresult = (result) => {
+        console.log(result.results[0][0].transcript);
+        send_filter(result.results[0][0].transcript)
+        resultObtained=true;
+    }
+
+    recognition.onend =() => {
+        if(!resultObtained){
+            //in case no voice is detected, trigger no result info panel
+            send_filter("noFilter");
+        }
+    }
+
+    recognition.start();
+}
+
+function handleSpeechClick(){
+    let firefoxAgent = navigator.userAgent.indexOf("Firefox") > -1;
+    if (firefoxAgent){
+        alert("Speech recognition is not supported by Firefox");
+        return;
+    }
+
+    if (microFilterActive ===false){
+        microFilterActive=true;
+        GetSpeech();
+        return;
+    }
+}
+

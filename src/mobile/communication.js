@@ -1,5 +1,6 @@
 // Source file for the communication between the mobile app and the server
 var context = null;
+var filterResultBlank = false;
 // Obtain the cookie from the browser
 window.getCookie = function(name) {
     // Split cookie string and get all individual name=value pairs in an array
@@ -30,11 +31,18 @@ socket.onmessage = function(event) {
                     case "movie":
                         context = "movie";
                         display_cross(true);
+                        display_microphone(false);
+                        disable_filter();
                         break;
                     case "menu":
                         context = "menu";
                         display_cross(false);
+                        display_microphone(true);
                 }
+                break;
+            case "noResultsFilter":
+                filterResultBlank = true;
+                animate_info_circle_open();
                 break;
         }
     } catch (e) {
@@ -59,6 +67,11 @@ function send_movement(movement) {
 function send_knob(value) {
     console.log("Sending knob: " + value)
     socket.send(JSON.stringify({"action":"knob", "id":getCookie("id"), "value":value}))
+}
+
+function send_filter(filter) {
+    console.log("Sending filter: " + filter)
+    socket.send(JSON.stringify({"action":"filter", "id":getCookie("id"), "filter":filter}))
 }
 
 
