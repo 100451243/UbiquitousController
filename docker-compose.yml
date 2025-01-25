@@ -1,0 +1,10 @@
+version: '3'
+services:
+  ubicu:
+    image: adelpozoman/ubicu
+    environment:
+      - PORT=4008
+    ports:
+      - "4008:4008"
+    volumes:
+      - /home/adelpozoman/films:/movies
