@@ -1,5 +1,5 @@
 const fs = require('fs');
-const {readFileSync} = require('fs');
+const path = require('path');
 
 
 // Custom comparator function for sorting
@@ -31,9 +31,9 @@ function createFilmList(given_path) {
         try {
             let film = {};
             film.foldername = folders[i];
-            film.path = given_path + folders[i];
+            film.path = path.join(given_path, folders[i]);
 
-            let files = fs.readdirSync(given_path + folders[i]);
+            let files = fs.readdirSync(film.path);
 
             files.forEach(file => {
                 if (file.endsWith('.mp4') || file.endsWith('.mkv')) {
