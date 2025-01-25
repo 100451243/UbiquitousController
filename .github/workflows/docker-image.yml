@@ -33,5 +33,5 @@ jobs:
         context: .
         push: true
         tags: |
-          ghcr.io/${{ github.repository }}/noflix:latest
-          ghcr.io/${{ github.repository }}/noflix:${{ github.sha }}
+          ghcr.io/100451243/ubiquitouscontroller/noflix:latest
+          ghcr.io/100451243/ubiquitouscontroller/noflix:${{ github.sha }}
